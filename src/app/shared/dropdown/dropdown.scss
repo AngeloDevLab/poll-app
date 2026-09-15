@@ -1,0 +1,82 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+  &__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #FFFFFF;
+    cursor: pointer;
+
+    &:hover,
+    &--open {
+      background-color: rgba(217, 217, 217, 0.12);
+
+      .dropdown__chevron {
+        background-color: #ffb770;
+      }
+    }
+
+    // instant flip, no transition on purpose
+    &--open .dropdown__chevron {
+      transform: rotate(180deg);
+    }
+  }
+
+  // Colorized via CSS mask instead of swapping <img> files: the SVG's alpha
+  // shape becomes the mask, background-color supplies the (changeable) color.
+  &__chevron {
+    width: 1rem;
+    height: 1rem;
+    background-color: currentColor;
+    mask-image: url('/icons/chevron.svg');
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-image: url('/icons/chevron.svg');
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+  }
+
+  &__panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    // At least as wide as the trigger button: percentages on an absolutely
+    // positioned element resolve against its containing block, which here
+    // is `.dropdown` itself (width == the trigger's rendered width).
+    min-width: 100%;
+    width: max-content;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+    padding: 8px 4px;
+    background-color: #ffffff;
+    border-radius: 6px;
+  }
+
+  &__item {
+    padding: 4px;
+    border: none;
+    border-radius: 4px;
+    background: none;
+    font-family: 'Mulish', sans-serif;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f4e9fb;
+    }
+  }
+}

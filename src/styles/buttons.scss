@@ -1,0 +1,106 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Nokora', sans-serif;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+.btn--primary {
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #221227;
+  border-radius: 10px;
+
+  // Mobile-first: no real hover on touch, so this is directly the "hover look" color.
+  background-color: #ffb770;
+  transition: background-color 0.2s ease-out;
+
+  // Icon slot on the right, after the text.
+  // Width itself is what animates: 0 -> revealed, so the icon visually
+  // "grows out of" the button's right edge instead of just fading in.
+  // Works for inline <svg> as well as <img src="...">.
+  .btn__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    overflow: hidden;
+    transition: width 0.2s ease-out;
+
+    > * {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex-shrink: 0;
+      opacity: 1;
+      transition: opacity 0.2s ease-out;
+    }
+  }
+
+  // Mobile-first default: no hover available, icon is always shown at full size
+  // (mobile only ever shows the icon variant of this button).
+
+  // Only devices with real mouse hover get the "text only" default + fly-in-on-hover behavior.
+  @media (hover: hover) and (pointer: fine) {
+    // Desktop default: the non-hover color, distinct from the mobile-first "hover look" above.
+    background-color: #ffcfa1;
+
+    .btn__icon {
+      width: 0;
+
+      > * {
+        opacity: 0;
+      }
+    }
+
+    &:hover {
+      background-color: #ffb770;
+
+      .btn__icon {
+        width: 1.25rem;
+
+        > * {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+.btn--secondary {
+  // TODO: values from Figma
+  background-color: transparent;
+  border: 1px solid currentColor;
+  color: #ffb770;
+}
+
+.btn--tertiary {
+  // TODO: values from Figma
+  background: none;
+  padding: 0.5rem;
+  color: #ffb770;
+  text-decoration: underline;
+}
+
+.btn--filter {
+  padding: 2px 10px;
+  background-color: #FEE9D4;
+  color: #35273A;
+
+  &:hover {
+    background-color: #FFCFA1;
+  }
+
+  &.active {
+    background-color: #FFB770;
+  }
+}

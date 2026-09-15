@@ -1,0 +1,14 @@
+<article
+  class="poll-card"
+  [class.poll-card--ending-soon]="variant() === 'ending-soon'"
+  [class.disabled]="!clickable()"
+  (click)="onClick()"
+>
+  <span class="poll-card__category">{{ displayCategory() }}</span>
+  <h3 class="poll-card__title">{{ poll().title }}</h3>
+  @if (poll().deadline; as deadline) {
+    <p class="poll-card__deadline">{{ deadline | endsIn }}</p>
+  } @else {
+    <p class="poll-card__deadline">No deadline</p>
+  }
+</article>

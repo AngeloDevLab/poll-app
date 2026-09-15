@@ -1,0 +1,22 @@
+<div class="dropdown">
+  <button
+    type="button"
+    class="dropdown__trigger"
+    [class.dropdown__trigger--open]="isOpen()"
+    [attr.aria-expanded]="isOpen()"
+    (click)="toggle()"
+  >
+    <span>{{ label() }}</span>
+    <span class="dropdown__chevron"></span>
+  </button>
+
+  @if (isOpen()) {
+    <div class="dropdown__panel">
+      @for (option of options(); track option) {
+        <button type="button" class="dropdown__item" (click)="select(option)">
+          {{ option }}
+        </button>
+      }
+    </div>
+  }
+</div>

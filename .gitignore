@@ -46,3 +46,7 @@ Thumbs.db
 # Interne Arbeitsdokumente (nicht Teil der Abgabe)
 /POLL-APP-BRIEFING.md
 /Poll-App Checkliste.md
+
+# AI assistant config (kept local only)
+/CLAUDE.md
+/.claude/

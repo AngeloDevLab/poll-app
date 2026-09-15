@@ -1,0 +1,66 @@
+<section class="hero">
+  <img class="hero__logo" src="/images/logo-orange.png" alt="logo">
+
+  <div class="hero-content">
+    <h1 class="hero-content__title">Collect Feedback, Unlock Ideas</h1>
+    <img class="hero-content__image" src="/images/survey-anim-end.png" alt="">
+    <p class="hero-content__infos">Create and share surveys in minutes - from team events to workplace culture. Collect
+      opinions, engage your
+      audience, and turn feedback into action.</p>
+  </div>
+  <button class="btn btn--primary" type="button" (click)="openNewSurveyDialog()">
+    <span>New survey</span>
+    <span class="btn__icon">
+      <img src="/icons/add_circle.svg" alt="">
+    </span>
+  </button>
+
+</section>
+
+<section class="polls">
+  <h2 class="polls__title">Your surveys</h2>
+
+  @if (endingSoon().length > 0) {
+  <div class="polls__ending-soon">
+    <h3 class="polls__ending-soon-title">Ending soon surveys</h3>
+    <div class="polls__ending-soon-list">
+      @for (poll of endingSoon(); track poll.id) {
+      <app-poll-card [poll]="poll" variant="ending-soon" />
+      }
+    </div>
+  </div>
+  }
+
+  <div class="poll-list">
+    <div class="poll-list__controls">
+      <div class="tabs">
+        <button class="btn btn--filter" type="button" [class.active]="activeTab() === 'running'" (click)="setTab('running')">
+          Active survey
+        </button>
+        <button class="btn btn--filter" type="button" [class.active]="activeTab() === 'closed'" (click)="setTab('closed')">
+          Past survey
+        </button>
+      </div>
+
+      <div class="category-filter">
+        <app-dropdown
+          [options]="activeCategoryOptions()"
+          [value]="activeCategoryValue()"
+          (valueChange)="setCategory($event)"
+        />
+        @if (hasActiveCategoryFilter()) {
+          <p class="category-filter__active">{{ activeCategoryValue() }}</p>
+        }
+      </div>
+    </div>
+
+
+    <div class="poll-list__grid">
+      @for (poll of visiblePolls(); track poll.id) {
+      <app-poll-card [poll]="poll" [clickable]="activeTab() === 'running'" />
+      } @empty {
+      <p class="empty">No survey active.</p>
+      }
+    </div>
+  </div>
+</section>
