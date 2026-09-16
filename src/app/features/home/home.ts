@@ -1,7 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { PollWithOptions, PollsService } from '../../core/polls.service';
-import { PollCard } from '../../shared/poll-card/poll-card';
+import { Component, computed, inject, signal, viewChild } from '@angular/core';
+import { NewPollInput, PollWithQuestions, PollsService } from '../../core/polls.service';
 import { Dropdown } from '../../shared/dropdown/dropdown';
+import { PollCard } from '../../shared/poll-card/poll-card';
+import { NewSurveyDialog } from '../new-survey-dialog/new-survey-dialog';
 
 type Tab = 'running' | 'closed';
 
@@ -10,7 +11,7 @@ const ENDING_SOON_LIMIT = 3;
 
 @Component({
   selector: 'app-home',
-  imports: [PollCard, Dropdown],
+  imports: [PollCard, Dropdown, NewSurveyDialog],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -42,6 +43,8 @@ export class Home {
 
   protected readonly hasActiveCategoryFilter = computed(() => this.activeCategoryValue() !== ALL_CATEGORIES);
 
+  protected readonly newSurveyDialog = viewChild.required(NewSurveyDialog);
+
   protected readonly visiblePolls = computed(() => {
     const polls = this.activeTab() === 'running' ? this.runningPolls() : this.closedPolls();
     const category = this.activeCategoryValue();
@@ -61,14 +64,18 @@ export class Home {
   }
 
   protected openNewSurveyDialog(): void {
-    // TODO Phase 3: open the native <dialog>
+    this.newSurveyDialog().show();
   }
 
-  private isClosed(poll: PollWithOptions): boolean {
+  protected onPollCreated(input: NewPollInput): void {
+    this.pollsService.createPoll(input);
+  }
+
+  private isClosed(poll: PollWithQuestions): boolean {
     return !!poll.deadline && poll.deadline.getTime() < Date.now();
   }
 
-  private categoriesOf(polls: PollWithOptions[]): string[] {
+  private categoriesOf(polls: PollWithQuestions[]): string[] {
     return [ALL_CATEGORIES, ...new Set(polls.map((p) => p.category))];
   }
 }

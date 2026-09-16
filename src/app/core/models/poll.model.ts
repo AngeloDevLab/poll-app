@@ -18,16 +18,24 @@ export interface Poll {
   createdAt: Date;
 }
 
-export interface PollOption {
+export interface PollQuestion {
   id: string;
   pollId: string;
+  text: string;
+  allowMultiple: boolean;
+  sortOrder: number;
+}
+
+export interface PollOption {
+  id: string;
+  questionId: string;
   text: string;
   sortOrder: number;
 }
 
 export interface PollResult {
   pollOptionId: string;
-  pollId: string;
+  questionId: string;
   text: string;
   voteCount: number;
 }

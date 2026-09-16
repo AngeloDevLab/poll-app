@@ -1,0 +1,64 @@
+.labeled-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__label {
+    font-family: 'Mulish';
+    font-weight: bold;
+    font-size: 18px;
+    color: #FEFDFF;
+  }
+
+  &__optional {
+    font-family: 'Mulish';
+    font-weight: 400;
+    font-size: 18px;
+    color: #FEFDFF;
+  }
+
+  &__delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    img {
+      width: 16px;
+      height: 18px;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__control {
+    padding: 7px 13px;
+    border: none;
+    border-radius: 5px;
+    border-top-right-radius: 20px;
+    background-color: #ffffff;
+    font-family: 'Mulish';
+    font-size: 1rem;
+    color: #35273a;
+    resize: vertical;
+
+    &::placeholder {
+      color: #8e7099;
+    }
+
+    &:focus {
+      background-color: #FEE9D4;
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { PollWithOptions } from '../../core/polls.service';
+import { PollWithQuestions } from '../../core/polls.service';
 import { EndsInPipe } from '../pipes/ends-in.pipe';
 
 @Component({
@@ -12,7 +12,7 @@ import { EndsInPipe } from '../pipes/ends-in.pipe';
 export class PollCard {
   private readonly router = inject(Router);
 
-  readonly poll = input.required<PollWithOptions>();
+  readonly poll = input.required<PollWithQuestions>();
   readonly clickable = input(true);
   readonly variant = input<'default' | 'ending-soon'>('default');
 

@@ -1,0 +1,92 @@
+<dialog #dialogRef class="new-survey-dialog" (close)="onDialogClosed()" (click)="onDialogClick($event)">
+  <div class="inner-dialog">
+
+    <img src="/images/logo-purple-dark.png" alt="logo">
+
+    <form class="new-survey-form" (ngSubmit)="onSubmit()">
+      <header class="new-survey-form__header">
+
+        <div class="new-survey-form__header-top-bar">
+          <div class="new-survey-form__status">Draft</div>
+          <button type="button" class="btn btn--secondary" (click)="close()" aria-label="Close">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="#FEFDFF" stroke="#FEFDFF" stroke-width="2"
+              stroke-linecap="round">
+              <line x1="6" y1="6" x2="18" y2="18" />
+              <line x1="18" y1="6" x2="6" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <h2 class="new-survey-form__title">Create new survey</h2>
+      </header>
+
+      <section class="new-survey-form__section">
+        <app-labeled-input label="Survey name" [(value)]="title" />
+        @if (titleError()) {
+          <span class="field__error">Survey name is required.</span>
+        }
+
+        <div class="field">
+          <div class="field__control">
+            <app-dropdown label="Choose category" [options]="categoryOptions" [value]="category()"
+              (valueChange)="category.set($event)" />
+            @if (category()) {
+            <span class="field__value">{{ category() }}</span>
+            }
+          </div>
+          @if (categoryError()) {
+          <span class="field__error">Please choose a category.</span>
+          }
+        </div>
+
+        <app-labeled-input label="Set end date" [optional]="true" type="date" [(value)]="deadline" />
+        <app-labeled-input label="Describing text" [optional]="true" [multiline]="true" [(value)]="description" />
+
+        @for (question of questions(); track $index; let qi = $index) {
+        <div class="question-block">
+          <div class="question-block__header">
+            <app-labeled-input class="question-block__title" [label]="(qi + 1) + '. Question'" [value]="question.text"
+              (valueChange)="updateQuestionText(qi, $event)" />
+            @if (questions().length > 1) {
+              <button type="button" class="question-block__remove" (click)="removeQuestion(qi)">Remove question</button>
+            }
+          </div>
+          @if (questionError(question)) {
+            <span class="field__error">Question text is required.</span>
+          }
+
+          <div class="question-block__answers-header">
+            <span class="field__label">Answers</span>
+            <label class="checkbox">
+              <input type="checkbox" [checked]="question.allowMultiple" (change)="onAllowMultipleChange(qi, $event)" />
+              Allow multiple answers.
+            </label>
+          </div>
+
+          @for (option of question.options; track $index; let oi = $index) {
+            <app-labeled-input [label]="optionLabel(oi)" [optional]="oi >= 2" [value]="option"
+              (valueChange)="updateOption(qi, oi, $event)" />
+            @if (optionError(question, oi)) {
+              <span class="field__error">This answer is required.</span>
+            }
+          }
+          <button type="button" class="btn btn--tertiary" (click)="addOption(qi)">+ Add answer</button>
+        </div>
+        }
+
+        <div class="new-survey-form__add-question">
+          <button type="button" class="btn btn--secondary" (click)="addQuestion()">+ Add next question</button>
+        </div>
+      </section>
+
+      <footer class="new-survey-form__footer">
+        <button type="button" class="btn btn--secondary" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn--primary">
+          <span>Create survey</span>
+        </button>
+      </footer>
+    </form>
+
+  </div>
+
+
+</dialog>

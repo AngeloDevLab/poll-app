@@ -1,0 +1,19 @@
+<div class="labeled-input">
+  <div class="labeled-input__label-row">
+    <span class="labeled-input__label">
+      {{ label() }}
+      @if (optional()) {
+        <span class="labeled-input__optional">(optional)</span>
+      }
+    </span>
+    <button type="button" class="labeled-input__delete" (click)="clear()" [attr.aria-label]="'Clear ' + label()">
+      <img src="/icons/delete.svg" alt="" />
+    </button>
+  </div>
+
+  @if (multiline()) {
+    <textarea class="labeled-input__control" [value]="value()" (input)="onInput($event)" [placeholder]="placeholder()" rows="3"></textarea>
+  } @else {
+    <input class="labeled-input__control" [type]="type()" [value]="value()" (input)="onInput($event)" [placeholder]="placeholder()" />
+  }
+</div>
