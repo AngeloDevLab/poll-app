@@ -104,17 +104,30 @@ export class NewSurveyDialog {
     );
   }
 
+  // The first two options are the default and can't be removed this way.
+  protected removeOption(questionIndex: number, optionIndex: number): void {
+    this.questions.update((qs) =>
+      qs.map((q, i) =>
+        i === questionIndex && q.options.length > 2
+          ? { ...q, options: q.options.filter((_, oi) => oi !== optionIndex) }
+          : q,
+      ),
+    );
+  }
+
   protected addQuestion(): void {
     this.questions.update((qs) => [...qs, emptyQuestion()]);
   }
 
+  // The first question is the default and can't be removed this way.
   protected removeQuestion(index: number): void {
     if (this.questions().length > 1) {
       this.questions.update((qs) => qs.filter((_, i) => i !== index));
     }
   }
 
-  protected onSubmit(): void {
+  protected onSubmit(event: Event): void {
+    event.preventDefault();
     this.submitted.set(true);
     if (!this.formValid()) {
       return;

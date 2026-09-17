@@ -14,6 +14,15 @@
   @if (multiline()) {
     <textarea class="labeled-input__control" [value]="value()" (input)="onInput($event)" [placeholder]="placeholder()" rows="3"></textarea>
   } @else {
-    <input class="labeled-input__control" [type]="type()" [value]="value()" (input)="onInput($event)" [placeholder]="placeholder()" />
+    <input
+      class="labeled-input__control"
+      [class.labeled-input__control--date-empty]="type() === 'date' && !value()"
+      [type]="type()"
+      [value]="value()"
+      (input)="onInput($event)"
+      [placeholder]="placeholder()"
+      [attr.lang]="type() === 'date' ? 'en-GB' : null"
+      [attr.min]="type() === 'date' ? today : null"
+    />
   }
 </div>

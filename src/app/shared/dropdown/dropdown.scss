@@ -6,7 +6,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 4px 10px;
+    padding: 4px 10px 4px var(--dropdown-padding-left, 10px);
     border: none;
     border-radius: 6px;
     background: none;
