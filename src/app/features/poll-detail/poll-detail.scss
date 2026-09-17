@@ -1,20 +1,17 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
 .poll-detail {
   min-height: 100vh;
-  background-color: #fefdff;
+  background-color: $color-white;
 }
 
 .inner-poll-detail {
-  max-width: 1040px;
-
-  >img {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-    margin-left: 1rem;
-  }
+  @include detail-shell-inner;
 }
 
 .poll-detail-panel {
-  background-color: rgba($color: #8e7099, $alpha: 0.1);
+  background-color: rgba($color: $color-mauve, $alpha: 0.1);
   border-top-right-radius: 100px;
   display: flex;
   flex-direction: column;
@@ -36,40 +33,34 @@
   }
 
   &__status {
+    @include status-pill($color-orange);
     align-self: flex-start;
-    background-color: #ffb770;
-    max-height: fit-content;
-    padding: 3px 12px;
-    border-top-right-radius: 14px;
-    font-family: 'Mulish';
-    font-weight: 600;
-    color: #221227;
 
     &--closed {
-      background-color: #ffcfa1;
+      background-color: $color-orange-light;
     }
   }
 
   &__meta {
     display: flex;
     justify-content: space-between;
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 500;
     font-size: 14px;
-    color: #35273A;
+    color: $color-plum;
   }
 
   &__title {
-    font-family: 'Nerko One';
+    font-family: $font-heading;
     font-weight: 400;
     font-size: 3rem;
-    color: #ee9236;
+    color: $color-orange-deep;
     line-height: 0.9;
   }
 
   &__description {
-    font-family: 'Mulish';
-    color: #35273a;
+    font-family: $font-body;
+    color: $color-plum;
   }
 
   &__questions {
@@ -96,10 +87,10 @@
 
 .question {
   &::marker {
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 700;
     font-size: 18px;
-    color: #35273a;
+    color: $color-plum;
   }
 
   &__body {
@@ -108,16 +99,16 @@
   }
 
   &__text {
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 700;
     font-size: 18px;
-    color: #35273a;
+    color: $color-plum;
   }
 
   &__hint {
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-size: 14px;
-    color: #35273A;
+    color: $color-plum;
   }
 
   &__options {
@@ -135,13 +126,13 @@
   align-items: center;
   padding: 6px 8px;
   border-radius: 3px;
-  font-family: 'Mulish';
-  color: #35273a;
+  font-family: $font-body;
+  color: $color-plum;
   cursor: pointer;
   transition: background-color 0.2s ease-out;
 
   &:hover:not(.option-row--disabled) {
-    background-color: rgba($color: #ffcfa1, $alpha: 0.4);
+    background-color: rgba($color: $color-orange-light, $alpha: 0.4);
   }
 
   &--disabled {
@@ -149,22 +140,7 @@
   }
 
   input[type='checkbox'] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 15px;
-    height: 15px;
-    margin: 0;
-    margin-right: 1rem;
-    flex-shrink: 0;
-    background-color: rgba($color: #8e7099, $alpha: 0.1);
-    background-image: url('/icons/checkbox-default.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    cursor: pointer;
-
-    &:checked {
-      background-image: url('/icons/checkbox-checked.svg');
-    }
+    @include custom-checkbox(rgba($color: $color-mauve, $alpha: 0.1), 1rem);
 
     &:disabled {
       cursor: default;
@@ -187,32 +163,22 @@
   border: none;
   border-radius: 20px;
   background-color: transparent;
-  font-family: 'Mulish';
+  font-family: $font-body;
   font-weight: bold;
   font-size: 18px;
-  color: #35273a;
+  color: $color-plum;
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(217, 217, 217, 0.12);
+    background-color: rgba($color: $color-grey, $alpha: 0.12);
 
     .results-toggle__chevron {
-      background-color: #ffb770;
+      background-color: $color-orange;
     }
   }
 
   &__chevron {
-    width: 0.75rem;
-    height: 0.75rem;
-    background-color: currentColor;
-    mask-image: url('/icons/chevron.svg');
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    -webkit-mask-image: url('/icons/chevron.svg');
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
+    @include mask-icon('/icons/chevron.svg', 0.75rem);
     transform: rotate(0deg);
     transition: transform 0.15s ease-out;
 
@@ -227,7 +193,7 @@
   flex-direction: column;
   gap: 1rem;
   padding: 56px 14px 30px 14px;
-  background-color: #fefdff;
+  background-color: $color-white;
 
   &__header {
     display: flex;
@@ -237,14 +203,14 @@
   }
 
   &__title {
-    font-family: 'Nerko One';
+    font-family: $font-heading;
     font-weight: 400;
     font-size: 2rem;
-    color: #221227;
+    color: $color-plum-dark;
   }
 
   &__live {
-    color: #FFB770;
+    color: $color-orange;
   }
 }
 
@@ -259,10 +225,10 @@
 
 .results-question {
   &::marker {
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 700;
     font-size: 18px;
-    color: #35273a;
+    color: $color-plum;
   }
 
   &__body {
@@ -272,10 +238,10 @@
   }
 
   &__text {
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 700;
     font-size: 18px;
-    color: #35273a;
+    color: $color-plum;
   }
 }
 
@@ -287,10 +253,10 @@
 
   &__letter {
     width: 1rem;
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 700;
     font-size: 14px;
-    color: #35273a;
+    color: $color-plum;
   }
 
   &__bar {
@@ -298,7 +264,7 @@
     height: 14px;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
-    background-color: #EDEDED;
+    background-color: $color-grey-light;
     overflow: hidden;
   }
 
@@ -306,17 +272,17 @@
     height: 100%;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
-    background-color: #ffb770;
+    background-color: $color-orange;
     transition: width 0.2s ease-out;
   }
 
   &__percentage {
     width: 2.5rem;
     text-align: right;
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 800;
     font-size: 14px;
-    color: #D79451;
+    color: $color-orange-muted;
   }
 }
 
@@ -327,7 +293,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  background-color: #35273a;
-  color: #fefdff;
-  font-family: 'Mulish';
+  background-color: $color-plum;
+  color: $color-white;
+  font-family: $font-body;
 }

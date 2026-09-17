@@ -1,39 +1,36 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
 .poll-card {
   display: flex;
   flex-direction: column;
   padding: 0.75rem 1rem;
-  background-color: rgba($color: #D9D9D9, $alpha: 0.08);
-  border-radius: 5px;
-  border-top-right-radius: 50px;
+  background-color: rgba($color: $color-grey, $alpha: 0.08);
+  @include accent-corner(5px, 50px);
   cursor: pointer;
 
   &__category {
     margin-bottom: 0.5rem;
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 500;
-    color: #FFCFA1;
+    color: $color-orange-light;
   }
 
   &__title {
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: bold;
-    color: #FFFFFF;
+    color: $color-white-pure;
   }
 
   &__deadline {
+    @include status-pill($color-orange-light, 3px 6px, 500);
     align-self: flex-end;
-    background-color: #FFCFA1;
     margin-top: 1.5rem;
-    padding: 3px 6px;
-    border-top-right-radius: 14px;
-    font-family: 'Mulish';
-    font-weight: 500;
     font-size: 14px;
-    color: #221227;
   }
 
   &:hover {
-    background-color: rgba($color: #D9D9D9, $alpha: 0.16);
+    background-color: rgba($color: $color-grey, $alpha: 0.16);
   }
 
   &.disabled {
@@ -43,23 +40,23 @@
 
   &--ending-soon {
     justify-content: space-between;
-    background-color: #FAF5FE;
+    background-color: $color-lavender;
     min-height: 230px;
     min-width: 250px;
     border-top-right-radius: 80px;
     padding: 1.5rem 1rem;
 
     .poll-card__category {
-      font-family: 'Mulish';
+      font-family: $font-body;
       font-weight: 600;
-      color: #35273A;
+      color: $color-plum;
     }
 
     .poll-card__title {
-      font-family: 'Mulish';
+      font-family: $font-body;
       font-weight: bold;
       font-size: 1.5rem;
-      color: #35273A;
+      color: $color-plum;
     }
 
     .poll-card__deadline {
@@ -67,7 +64,7 @@
     }
 
     &:hover {
-     background-color: #F4E9FB;
+     background-color: $color-lavender-hover;
     }
   }
 }

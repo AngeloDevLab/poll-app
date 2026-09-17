@@ -1,0 +1,25 @@
+// Design tokens extracted from the Figma reference.
+// Named by hue/tone (not by usage) since the same color is reused across
+// unrelated roles (e.g. $color-orange shows up in buttons, chevrons and bars).
+
+// Colors
+$color-plum: #35273a;
+$color-plum-dark: #221227;
+$color-mauve: #8e7099;
+$color-lavender: #faf5fe;
+$color-lavender-hover: #f4e9fb;
+$color-white: #fefdff;
+$color-white-pure: #ffffff;
+$color-orange: #ffb770;
+$color-orange-deep: #ee9236;
+$color-orange-light: #ffcfa1;
+$color-orange-pale: #fee9d4;
+$color-orange-muted: #d79451;
+$color-grey: #d9d9d9;
+$color-grey-light: #ededed;
+$color-red: #ffada5;
+
+// Fonts
+$font-heading: 'Nerko One', cursive;
+$font-body: 'Mulish', sans-serif;
+$font-button: 'Nokora', sans-serif;

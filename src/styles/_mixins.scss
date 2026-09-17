@@ -1,0 +1,68 @@
+@use 'tokens' as *;
+
+// The recurring "signature" corner treatment: mostly square, one big
+// rounded corner on the top-right.
+@mixin accent-corner($radius: 5px, $accent: 20px) {
+  border-radius: $radius;
+  border-top-right-radius: $accent;
+}
+
+// Colorized via CSS mask instead of swapping <img> files: the SVG's alpha
+// shape becomes the mask, background-color supplies the (changeable) color.
+@mixin mask-icon($url, $size: 1rem) {
+  width: $size;
+  height: $size;
+  background-color: currentColor;
+  mask-image: url($url);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url($url);
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+// Small pill badge used for status/deadline/category labels.
+@mixin status-pill($bg: $color-orange-light, $padding: 3px 12px, $weight: 600) {
+  background-color: $bg;
+  max-height: fit-content;
+  padding: $padding;
+  border-top-right-radius: 14px;
+  font-family: $font-body;
+  font-weight: $weight;
+  color: $color-plum-dark;
+}
+
+// Custom checkbox: native input hidden, default/checked state via background icon.
+@mixin custom-checkbox($bg: $color-white, $margin-right: 0) {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  margin-right: $margin-right;
+  flex-shrink: 0;
+  border-radius: 3px;
+  background-color: $bg;
+  background-image: url('/icons/checkbox-default.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+  &:checked {
+    background-image: url('/icons/checkbox-checked.svg');
+  }
+}
+
+// Shared shell around dialog/detail content: capped width, breathing room
+// around the top-left illustration.
+@mixin detail-shell-inner {
+  max-width: 1040px;
+
+  > img {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    margin-left: 1rem;
+  }
+}

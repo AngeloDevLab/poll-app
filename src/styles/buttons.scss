@@ -1,3 +1,6 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -5,7 +8,7 @@
   padding: 0.75rem 1rem;
   border: none;
   border-radius: 8px;
-  font-family: 'Nokora', sans-serif;
+  font-family: $font-button;
   cursor: pointer;
 
   &:disabled {
@@ -18,11 +21,11 @@
   gap: 0.5rem;
   font-weight: bold;
   font-size: 1.125rem;
-  color: #221227;
+  color: $color-plum-dark;
   border-radius: 10px;
 
   // Mobile-first: no real hover on touch, so this is directly the "hover look" color.
-  background-color: #ffb770;
+  background-color: $color-orange;
   transition: background-color 0.2s ease-out;
 
   // Icon slot on the right, after the text.
@@ -52,7 +55,7 @@
   // Only devices with real mouse hover get the "text only" default + fly-in-on-hover behavior.
   @media (hover: hover) and (pointer: fine) {
     // Desktop default: the non-hover color, distinct from the mobile-first "hover look" above.
-    background-color: #ffcfa1;
+    background-color: $color-orange-light;
 
     .btn__icon {
       width: 0;
@@ -63,7 +66,7 @@
     }
 
     &:hover {
-      background-color: #ffb770;
+      background-color: $color-orange;
 
       .btn__icon {
         width: 1.25rem;
@@ -78,15 +81,15 @@
 
 .btn--secondary {
   padding: 8px 12px;
-  background-color: rgba($color: #FFB770, $alpha: 0.3);
+  background-color: rgba($color: $color-orange, $alpha: 0.3);
   border-radius: 10px;
-  color: #FEFDFF;
+  color: $color-white;
   gap: 0.5rem;
   font-weight: bold;
   font-size: 1rem;
 
   &:hover {
-    background-color: rgba($color: #FFB770, $alpha: 0.6);
+    background-color: rgba($color: $color-orange, $alpha: 0.6);
   }
 }
 
@@ -96,12 +99,12 @@
   padding: 8px 12px;
   border-radius: 0;
   background: none;
-  color: #FEFDFF;
+  color: $color-white;
   font-weight: bold;
   font-size: 1rem;
 
   &:hover {
-    background-color: rgba($color: #FAF5FE, $alpha: 0.2);
+    background-color: rgba($color: $color-lavender, $alpha: 0.2);
   }
 
   &__inner {
@@ -120,14 +123,14 @@
 
 .btn--filter {
   padding: 2px 10px;
-  background-color: #FEE9D4;
-  color: #35273A;
+  background-color: $color-orange-pale;
+  color: $color-plum;
 
   &:hover {
-    background-color: #FFCFA1;
+    background-color: $color-orange-light;
   }
 
   &.active {
-    background-color: #FFB770;
+    background-color: $color-orange;
   }
 }

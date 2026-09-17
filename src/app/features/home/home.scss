@@ -1,6 +1,8 @@
+@use '../../../styles/tokens' as *;
+
 :host {
   display: block;
-  background-color: #35273a;
+  background-color: $color-plum;
   padding: 3rem 1rem;
 }
 
@@ -21,8 +23,8 @@
     gap: 1.5rem;
 
     &__title {
-      font-family: 'Nerko One';
-      color: #FFB770;
+      font-family: $font-heading;
+      color: $color-orange;
       font-size: 3.25rem;
       line-height: 0.9;
     }
@@ -33,10 +35,10 @@
     }
 
     &__infos {
-      font-family: 'Mulish';
+      font-family: $font-body;
       font-weight: 600;
       font-size: 1.25rem;
-      color: #FFFFFF;
+      color: $color-white-pure;
     }
   }
 }
@@ -55,16 +57,16 @@
   }
 
   &__title {
-    font-family: 'Nerko One';
-    color: #FFB770;
+    font-family: $font-heading;
+    color: $color-orange;
     font-size: 3rem;
   }
 
   &__ending-soon-title {
-    font-family: 'Mulish';
+    font-family: $font-body;
     font-weight: 500;
     font-size: 1.5rem;
-    color: #FFFFFF;
+    color: $color-white-pure;
   }
 
   &__ending-soon-list {
@@ -98,10 +100,10 @@
 
     &__active {
       margin-left: 10px;
-      font-family: 'Mulish', sans-serif;
+      font-family: $font-body;
       font-weight: 400;
       font-size: 14px;
-      color: #ffb770;
+      color: $color-orange;
     }
   }
 
