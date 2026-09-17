@@ -1,5 +1,7 @@
 import { Component, computed, inject, signal, viewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NewPollInput, PollWithQuestions, PollsService } from '../../core/polls.service';
+import { ToastService } from '../../core/toast.service';
 import { Dropdown } from '../../shared/dropdown/dropdown';
 import { PollCard } from '../../shared/poll-card/poll-card';
 import { NewSurveyDialog } from '../new-survey-dialog/new-survey-dialog';
@@ -17,6 +19,8 @@ const ENDING_SOON_LIMIT = 3;
 })
 export class Home {
   private readonly pollsService = inject(PollsService);
+  private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
 
   protected readonly polls = this.pollsService.listPolls();
   protected readonly activeTab = signal<Tab>('running');
@@ -68,7 +72,9 @@ export class Home {
   }
 
   protected onPollCreated(input: NewPollInput): void {
-    this.pollsService.createPoll(input);
+    const id = this.pollsService.createPoll(input);
+    this.toastService.show('Survey created!');
+    this.router.navigate(['/polls', id]);
   }
 
   private isClosed(poll: PollWithQuestions): boolean {

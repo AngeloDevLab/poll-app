@@ -87,11 +87,14 @@ const FAKE_POLLS: Poll[] = [
 
 const FAKE_QUESTIONS: PollQuestion[] = [
   { id: 'p1-q1', pollId: 'p1', text: 'Which programming language should we learn next?', allowMultiple: false, sortOrder: 0 },
+  { id: 'p1-q2', pollId: 'p1', text: 'How many hours per week can you dedicate to learning it?', allowMultiple: false, sortOrder: 1 },
   { id: 'p2-q1', pollId: 'p2', text: 'Best lunch option in the cafeteria', allowMultiple: false, sortOrder: 0 },
   { id: 'p3-q1', pollId: 'p3', text: 'Team event in October', allowMultiple: false, sortOrder: 0 },
+  { id: 'p3-q2', pollId: 'p3', text: 'Which day works best?', allowMultiple: false, sortOrder: 1 },
   { id: 'p4-q1', pollId: 'p4', text: 'Should we introduce pair programming?', allowMultiple: false, sortOrder: 0 },
   { id: 'p5-q1', pollId: 'p5', text: 'Favorite editor theme', allowMultiple: false, sortOrder: 0 },
   { id: 'p6-q1', pollId: 'p6', text: 'How should we improve our office wellness program?', allowMultiple: true, sortOrder: 0 },
+  { id: 'p6-q2', pollId: 'p6', text: 'Preferred format for feedback sessions?', allowMultiple: false, sortOrder: 1 },
   { id: 'p7-q1', pollId: 'p7', text: 'Which game night should we host next?', allowMultiple: false, sortOrder: 0 },
 ];
 
@@ -100,6 +103,11 @@ const FAKE_OPTIONS: PollOption[] = [
   { id: 'p1-o2', questionId: 'p1-q1', text: 'Python', sortOrder: 1 },
   { id: 'p1-o3', questionId: 'p1-q1', text: 'Rust', sortOrder: 2 },
   { id: 'p1-o4', questionId: 'p1-q1', text: 'Go', sortOrder: 3 },
+
+  { id: 'p1-o5', questionId: 'p1-q2', text: '1-2 hours', sortOrder: 0 },
+  { id: 'p1-o6', questionId: 'p1-q2', text: '3-5 hours', sortOrder: 1 },
+  { id: 'p1-o7', questionId: 'p1-q2', text: '6-10 hours', sortOrder: 2 },
+  { id: 'p1-o8', questionId: 'p1-q2', text: '10+ hours', sortOrder: 3 },
 
   { id: 'p2-o1', questionId: 'p2-q1', text: 'Pasta', sortOrder: 0 },
   { id: 'p2-o2', questionId: 'p2-q1', text: 'Salad bar', sortOrder: 1 },
@@ -110,6 +118,10 @@ const FAKE_OPTIONS: PollOption[] = [
   { id: 'p3-o2', questionId: 'p3-q1', text: 'Escape room', sortOrder: 1 },
   { id: 'p3-o3', questionId: 'p3-q1', text: 'Barbecue', sortOrder: 2 },
   { id: 'p3-o4', questionId: 'p3-q1', text: 'Climbing park', sortOrder: 3 },
+
+  { id: 'p3-o5', questionId: 'p3-q2', text: 'Monday', sortOrder: 0 },
+  { id: 'p3-o6', questionId: 'p3-q2', text: 'Wednesday', sortOrder: 1 },
+  { id: 'p3-o7', questionId: 'p3-q2', text: 'Friday', sortOrder: 2 },
 
   { id: 'p4-o1', questionId: 'p4-q1', text: 'Yes, always', sortOrder: 0 },
   { id: 'p4-o2', questionId: 'p4-q1', text: 'Only for complex tasks', sortOrder: 1 },
@@ -125,18 +137,73 @@ const FAKE_OPTIONS: PollOption[] = [
   { id: 'p6-o3', questionId: 'p6-q1', text: 'Healthy snacks', sortOrder: 2 },
   { id: 'p6-o4', questionId: 'p6-q1', text: 'Mental health days', sortOrder: 3 },
 
+  { id: 'p6-o5', questionId: 'p6-q2', text: 'Anonymous surveys', sortOrder: 0 },
+  { id: 'p6-o6', questionId: 'p6-q2', text: 'Team town halls', sortOrder: 1 },
+  { id: 'p6-o7', questionId: 'p6-q2', text: '1:1 check-ins', sortOrder: 2 },
+
   { id: 'p7-o1', questionId: 'p7-q1', text: 'Board games', sortOrder: 0 },
   { id: 'p7-o2', questionId: 'p7-q1', text: 'Trivia night', sortOrder: 1 },
   { id: 'p7-o3', questionId: 'p7-q1', text: 'Video games tournament', sortOrder: 2 },
   { id: 'p7-o4', questionId: 'p7-q1', text: 'Escape room', sortOrder: 3 },
 ];
 
+// Seed votes use fake voter ids (never the real localStorage voter_id), so
+// they show up in results without making the app think the current browser
+// has already voted.
+function seedVotes(entries: { questionId: string; pollOptionId: string; voterIds: string[] }[]): Vote[] {
+  return entries.flatMap(({ questionId, pollOptionId, voterIds }) =>
+    voterIds.map((voterId) => ({
+      id: `seed-${pollOptionId}-${voterId}`,
+      questionId,
+      pollOptionId,
+      voterId,
+    })),
+  );
+}
+
+const FAKE_VOTES: Vote[] = seedVotes([
+  { questionId: 'p1-q1', pollOptionId: 'p1-o1', voterIds: ['v1', 'v2', 'v3', 'v4', 'v5'] },
+  { questionId: 'p1-q1', pollOptionId: 'p1-o2', voterIds: ['v6', 'v7', 'v8'] },
+  { questionId: 'p1-q1', pollOptionId: 'p1-o3', voterIds: ['v9', 'v10'] },
+  { questionId: 'p1-q1', pollOptionId: 'p1-o4', voterIds: ['v11'] },
+
+  { questionId: 'p1-q2', pollOptionId: 'p1-o5', voterIds: ['v1', 'v2'] },
+  { questionId: 'p1-q2', pollOptionId: 'p1-o6', voterIds: ['v3', 'v4', 'v5', 'v6'] },
+  { questionId: 'p1-q2', pollOptionId: 'p1-o7', voterIds: ['v7'] },
+
+  { questionId: 'p2-q1', pollOptionId: 'p2-o1', voterIds: ['v1', 'v2', 'v3'] },
+  { questionId: 'p2-q1', pollOptionId: 'p2-o2', voterIds: ['v4', 'v5'] },
+  { questionId: 'p2-q1', pollOptionId: 'p2-o3', voterIds: ['v6'] },
+  { questionId: 'p2-q1', pollOptionId: 'p2-o4', voterIds: ['v7', 'v8', 'v9', 'v10'] },
+
+  { questionId: 'p3-q1', pollOptionId: 'p3-o1', voterIds: ['v1', 'v2'] },
+  { questionId: 'p3-q1', pollOptionId: 'p3-o2', voterIds: ['v3', 'v4', 'v5', 'v6', 'v7'] },
+  { questionId: 'p3-q1', pollOptionId: 'p3-o3', voterIds: ['v8'] },
+  { questionId: 'p3-q1', pollOptionId: 'p3-o4', voterIds: ['v9', 'v10', 'v11'] },
+
+  { questionId: 'p3-q2', pollOptionId: 'p3-o5', voterIds: ['v1'] },
+  { questionId: 'p3-q2', pollOptionId: 'p3-o6', voterIds: ['v2', 'v3', 'v4', 'v5'] },
+  { questionId: 'p3-q2', pollOptionId: 'p3-o7', voterIds: ['v6', 'v7'] },
+
+  // allowMultiple: same voter can appear under more than one option.
+  { questionId: 'p6-q1', pollOptionId: 'p6-o1', voterIds: ['v1', 'v2', 'v3'] },
+  { questionId: 'p6-q1', pollOptionId: 'p6-o2', voterIds: ['v1', 'v4', 'v5'] },
+  { questionId: 'p6-q1', pollOptionId: 'p6-o3', voterIds: ['v2', 'v3', 'v6', 'v7'] },
+  { questionId: 'p6-q1', pollOptionId: 'p6-o4', voterIds: ['v4', 'v5', 'v6', 'v7', 'v8'] },
+
+  { questionId: 'p6-q2', pollOptionId: 'p6-o5', voterIds: ['v1', 'v2', 'v3', 'v4'] },
+  { questionId: 'p6-q2', pollOptionId: 'p6-o6', voterIds: ['v5', 'v6'] },
+  { questionId: 'p6-q2', pollOptionId: 'p6-o7', voterIds: ['v7', 'v8', 'v9'] },
+
+  // p4, p5, p7 are left without seed votes, to also cover the zero-votes case.
+]);
+
 @Injectable({ providedIn: 'root' })
 export class PollsService {
   private readonly polls = signal<Poll[]>(FAKE_POLLS);
   private readonly questions = signal<PollQuestion[]>(FAKE_QUESTIONS);
   private readonly options = signal<PollOption[]>(FAKE_OPTIONS);
-  private readonly votes = signal<Vote[]>([]);
+  private readonly votes = signal<Vote[]>(FAKE_VOTES);
 
   listPolls(): Signal<PollWithQuestions[]> {
     return computed(() => this.polls().map((poll) => this.attachQuestions(poll)));
@@ -166,7 +233,7 @@ export class PollsService {
     return computed(() => this.votes().some((v) => v.questionId === questionId && v.voterId === voterId));
   }
 
-  createPoll(input: NewPollInput): void {
+  createPoll(input: NewPollInput): string {
     const pollId = crypto.randomUUID();
     const poll: Poll = {
       id: pollId,
@@ -201,6 +268,8 @@ export class PollsService {
     this.polls.update((polls) => [...polls, poll]);
     this.questions.update((questions) => [...questions, ...newQuestions]);
     this.options.update((options) => [...options, ...newOptions]);
+
+    return pollId;
   }
 
   vote(questionId: string, pollOptionId: string): void {
