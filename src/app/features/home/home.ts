@@ -1,10 +1,10 @@
 import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NewPollInput, PollWithQuestions, PollsService } from '../../core/polls.service';
-import { ToastService } from '../../core/toast.service';
 import { Dropdown } from '../../shared/dropdown/dropdown';
 import { PollCard } from '../../shared/poll-card/poll-card';
 import { NewSurveyDialog } from '../new-survey-dialog/new-survey-dialog';
+import { SurveyPublishedDialog } from '../survey-published-dialog/survey-published-dialog';
 
 type Tab = 'running' | 'closed';
 
@@ -13,13 +13,12 @@ const ENDING_SOON_LIMIT = 3;
 
 @Component({
   selector: 'app-home',
-  imports: [PollCard, Dropdown, NewSurveyDialog],
+  imports: [PollCard, Dropdown, NewSurveyDialog, SurveyPublishedDialog],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
   private readonly pollsService = inject(PollsService);
-  private readonly toastService = inject(ToastService);
   private readonly router = inject(Router);
 
   protected readonly polls = this.pollsService.listPolls();
@@ -48,6 +47,9 @@ export class Home {
   protected readonly hasActiveCategoryFilter = computed(() => this.activeCategoryValue() !== ALL_CATEGORIES);
 
   protected readonly newSurveyDialog = viewChild.required(NewSurveyDialog);
+  protected readonly publishedDialog = viewChild.required(SurveyPublishedDialog);
+
+  private pendingPublishedPollId?: string;
 
   protected readonly visiblePolls = computed(() => {
     const polls = this.activeTab() === 'running' ? this.runningPolls() : this.closedPolls();
@@ -71,10 +73,21 @@ export class Home {
     this.newSurveyDialog().show();
   }
 
-  protected onPollCreated(input: NewPollInput): void {
-    const id = this.pollsService.createPoll(input);
-    this.toastService.show('Survey created!');
-    this.router.navigate(['/polls', id]);
+  protected async onPollCreated(input: NewPollInput): Promise<void> {
+    const id = await this.pollsService.createPoll(input).catch(() => undefined);
+    if (!id) {
+      return;
+    }
+    this.pendingPublishedPollId = id;
+    this.publishedDialog().show();
+  }
+
+  protected onPublishedDialogClosed(): void {
+    const id = this.pendingPublishedPollId;
+    this.pendingPublishedPollId = undefined;
+    if (id) {
+      this.router.navigate(['/polls', id]);
+    }
   }
 
   private isClosed(poll: PollWithQuestions): boolean {
@@ -85,3 +98,5 @@ export class Home {
     return [ALL_CATEGORIES, ...new Set(polls.map((p) => p.category))];
   }
 }
+
+

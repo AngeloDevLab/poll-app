@@ -1,9 +1,14 @@
 <div class="labeled-input">
   <div class="labeled-input__label-row">
-    <span class="labeled-input__label">
-      {{ label() }}
-      @if (optional()) {
-        <span class="labeled-input__optional">(optional)</span>
+    <span class="labeled-input__label-group">
+      <span class="labeled-input__label">
+        {{ label() }}
+        @if (optional()) {
+          <span class="labeled-input__optional">(optional)</span>
+        }
+      </span>
+      @if (error(); as message) {
+        <span class="labeled-input__error">{{ message }}</span>
       }
     </span>
     <button type="button" class="labeled-input__delete" (click)="clear()" [attr.aria-label]="'Clear ' + label()">
@@ -12,7 +17,7 @@
   </div>
 
   @if (multiline()) {
-    <textarea class="labeled-input__control" [value]="value()" (input)="onInput($event)" [placeholder]="placeholder()" rows="3"></textarea>
+    <textarea class="labeled-input__control" [value]="value()" (input)="onInput($event)" (blur)="blurred.emit()" [placeholder]="placeholder()" rows="3"></textarea>
   } @else {
     <input
       class="labeled-input__control"
@@ -20,6 +25,7 @@
       [type]="type()"
       [value]="value()"
       (input)="onInput($event)"
+      (blur)="blurred.emit()"
       [placeholder]="placeholder()"
       [attr.lang]="type() === 'date' ? 'en-GB' : null"
       [attr.min]="type() === 'date' ? today : null"

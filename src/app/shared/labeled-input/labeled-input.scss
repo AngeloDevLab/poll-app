@@ -12,6 +12,12 @@
     justify-content: space-between;
   }
 
+  &__label-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
   &__label {
     font-family: $font-body;
     font-weight: bold;
@@ -24,6 +30,13 @@
     font-weight: 400;
     font-size: 18px;
     color: $color-white;
+  }
+
+  &__error {
+    font-family: $font-body;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: $color-red;
   }
 
   &__delete {

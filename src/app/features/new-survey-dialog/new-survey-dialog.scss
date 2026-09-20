@@ -155,8 +155,11 @@
   }
 
   &__error {
+    display: block;
+    min-height: 1.25rem;
     font-family: $font-body;
-    font-size: 0.8125rem;
+    font-weight: 600;
+    font-size: 0.875rem;
     color: $color-red;
   }
 }

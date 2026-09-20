@@ -23,6 +23,7 @@ function emptyQuestion(): QuestionDraft {
 })
 export class NewSurveyDialog {
   private readonly document = inject(DOCUMENT);
+  private readonly hostElement = inject(ElementRef<HTMLElement>);
 
   readonly created = output<NewPollInput>();
 
@@ -39,8 +40,15 @@ export class NewSurveyDialog {
 
   protected readonly todayIso = new Date().toISOString().slice(0, 10);
 
-  protected readonly titleError = computed(() => this.submitted() && !this.title().trim());
-  protected readonly categoryError = computed(() => this.submitted() && !this.category());
+  // Fields reveal their error as soon as they're blurred, not only on submit.
+  private readonly touched = signal<Set<string>>(new Set());
+
+  protected readonly titleError = computed(
+    () => (this.touched().has('title') || this.submitted()) && !this.title().trim(),
+  );
+  protected readonly categoryError = computed(
+    () => (this.touched().has('category') || this.submitted()) && !this.category(),
+  );
 
   protected readonly formValid = computed(() => {
     if (!this.title().trim() || !this.category()) {
@@ -73,12 +81,22 @@ export class NewSurveyDialog {
     return `${String.fromCharCode(65 + index)}.`;
   }
 
-  protected questionError(question: QuestionDraft): boolean {
-    return this.submitted() && !question.text.trim();
+  protected markTouched(key: string): void {
+    this.touched.update((keys) => new Set(keys).add(key));
   }
 
-  protected optionError(question: QuestionDraft, index: number): boolean {
-    return this.submitted() && index < 2 && !question.options[index].trim();
+  protected questionError(question: QuestionDraft, questionIndex: number): boolean {
+    return (
+      (this.touched().has(`question-${questionIndex}`) || this.submitted()) && !question.text.trim()
+    );
+  }
+
+  protected optionError(question: QuestionDraft, questionIndex: number, optionIndex: number): boolean {
+    return (
+      (this.touched().has(`option-${questionIndex}-${optionIndex}`) || this.submitted()) &&
+      optionIndex < 2 &&
+      !question.options[optionIndex].trim()
+    );
   }
 
   protected updateQuestionText(index: number, text: string): void {
@@ -130,6 +148,7 @@ export class NewSurveyDialog {
     event.preventDefault();
     this.submitted.set(true);
     if (!this.formValid()) {
+      this.scrollToFirstError();
       return;
     }
 
@@ -149,6 +168,15 @@ export class NewSurveyDialog {
     this.close();
   }
 
+  // Errors render on the next tick (they depend on the `submitted`/`touched`
+  // signals just set above), so wait a frame before looking for the first one.
+  private scrollToFirstError(): void {
+    setTimeout(() => {
+      const firstError = this.hostElement.nativeElement.querySelector('.labeled-input__error, .field__error');
+      firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+
   private toEndOfDay(dateIso: string): Date {
     const [year, month, day] = dateIso.split('-').map(Number);
     return new Date(year, month - 1, day, 23, 59, 59, 999);
@@ -161,5 +189,6 @@ export class NewSurveyDialog {
     this.category.set('');
     this.questions.set([emptyQuestion()]);
     this.submitted.set(false);
+    this.touched.set(new Set());
   }
 }

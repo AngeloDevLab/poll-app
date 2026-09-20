@@ -20,20 +20,19 @@
       </header>
 
       <section class="new-survey-form__section">
-        <app-labeled-input label="Survey name" [(value)]="title" />
-        @if (titleError()) {
-        <span class="field__error">Survey name is required.</span>
-        }
+        <app-labeled-input label="Survey name" [(value)]="title" [error]="titleError() ? 'Required' : null"
+          (blurred)="markTouched('title')" />
 
         <div class="field">
           <div class="field__control">
             <app-dropdown label="Choose category" [options]="categoryOptions" [value]="category()"
-              (valueChange)="category.set($event)" />
+              (valueChange)="category.set($event)" (closed)="markTouched('category')" />
+            @if (categoryError()) {
+            <span class="field__error">Please choose a category.</span>
+            } @else {
             <span class="field__value">{{ category() }}</span>
+            }
           </div>
-          @if (categoryError()) {
-          <span class="field__error">Please choose a category.</span>
-          }
         </div>
 
         <app-labeled-input label="Set end date" [optional]="true" type="date" [(value)]="deadline" />
@@ -43,11 +42,10 @@
         <div class="question-block">
           <div class="question-block__header">
             <app-labeled-input class="question-block__title" [label]="(qi + 1) + '. Question'" [value]="question.text"
-              (valueChange)="updateQuestionText(qi, $event)" (removeRequested)="removeQuestion(qi)" />
+              [error]="questionError(question, qi) ? 'Required' : null"
+              (valueChange)="updateQuestionText(qi, $event)" (removeRequested)="removeQuestion(qi)"
+              (blurred)="markTouched('question-' + qi)" />
           </div>
-          @if (questionError(question)) {
-          <span class="field__error">Question text is required.</span>
-          }
 
           <div class="question-block__answers-header">
             <span class="field__label">Answers</span>
@@ -59,10 +57,9 @@
 
           @for (option of question.options; track $index; let oi = $index) {
           <app-labeled-input [label]="optionLabel(oi)" [value]="option"
-            (valueChange)="updateOption(qi, oi, $event)" (removeRequested)="removeOption(qi, oi)" />
-          @if (optionError(question, oi)) {
-          <span class="field__error">This answer is required.</span>
-          }
+            [error]="optionError(question, qi, oi) ? 'Required' : null"
+            (valueChange)="updateOption(qi, oi, $event)" (removeRequested)="removeOption(qi, oi)"
+            (blurred)="markTouched('option-' + qi + '-' + oi)" />
           }
           <button type="button" class="btn btn--tertiary" (click)="addOption(qi)">
             <span class="btn--tertiary__inner">

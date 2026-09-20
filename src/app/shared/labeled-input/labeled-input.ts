@@ -8,6 +8,7 @@ import { Component, input, model, output } from '@angular/core';
 export class LabeledInput {
   readonly label = input.required<string>();
   readonly optional = input(false);
+  readonly error = input<string | null>(null);
   readonly type = input<'text' | 'date'>('text');
   readonly multiline = input(false);
   readonly placeholder = input('');
@@ -17,6 +18,10 @@ export class LabeledInput {
   // field — lets a parent that generates repeatable fields (e.g. a question or
   // an answer option) remove the whole thing instead of just wiping the text.
   readonly removeRequested = output<void>();
+
+  // Lets a parent reveal validation errors as soon as the user leaves a field,
+  // instead of only on form submit.
+  readonly blurred = output<void>();
 
   protected clear(): void {
     if (this.value()) {

@@ -1,0 +1,48 @@
+@use '../../../styles/tokens' as *;
+@use '../../../styles/mixins' as *;
+
+.survey-published-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  border: none;
+  padding: 0;
+  max-width: min(480px, calc(100vw - 2rem));
+  background: transparent;
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.survey-published-dialog__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 22px 24px 89px 26px;
+  @include accent-corner(5px, 50px);
+  background-color: $color-orange-pale;
+}
+
+.survey-published-dialog__text {
+  margin: 0;
+  font-family: $font-heading;
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: $color-plum-dark;
+}
+
+.survey-published-dialog__close {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
