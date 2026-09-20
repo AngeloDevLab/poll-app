@@ -50,3 +50,6 @@ Thumbs.db
 # AI assistant config (kept local only)
 /CLAUDE.md
 /.claude/
+
+# Supabase credentials (real values, kept local only)
+/src/environments/environment.ts

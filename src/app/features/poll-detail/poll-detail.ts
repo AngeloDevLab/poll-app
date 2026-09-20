@@ -28,11 +28,8 @@ export class PollDetail {
 
   protected readonly resultsExpanded = signal(true);
 
-  // Voted (this visit, via Complete, or on an earlier visit) on every question.
-  protected readonly hasCompleted = computed(() => {
-    const poll = this.poll();
-    return !!poll && poll.questions.every((q) => this.pollsService.hasVoted(q.id)());
-  });
+  // Completed (via Complete) this visit. No cross-visit vote-locking - see CLAUDE.md.
+  protected readonly hasCompleted = signal(false);
 
   protected readonly canComplete = computed(() => {
     const poll = this.poll();
@@ -89,6 +86,7 @@ export class PollDetail {
         this.pollsService.vote(question.id, optionId);
       }
     }
+    this.hasCompleted.set(true);
     this.resultsExpanded.set(true);
   }
 

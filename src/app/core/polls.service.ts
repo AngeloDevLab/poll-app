@@ -1,6 +1,7 @@
-import { Injectable, Signal, computed, signal } from '@angular/core';
+import { Injectable, Signal, computed, inject, signal } from '@angular/core';
 import { Poll, PollCategory, PollOption, PollQuestion, PollResult } from './models/poll.model';
-import { getVoterId } from './voter-id';
+import { supabase } from './supabase-client';
+import { ToastService } from './toast.service';
 
 export interface QuestionWithOptions extends PollQuestion {
   options: PollOption[];
@@ -28,182 +29,80 @@ interface Vote {
   id: string;
   questionId: string;
   pollOptionId: string;
-  voterId: string;
 }
 
-const FAKE_POLLS: Poll[] = [
-  {
-    id: 'p1',
-    title: 'Which programming language should we learn next?',
-    description: "We'd like to get your preference for the next course block.",
-    category: 'Education & Learning',
-    deadline: new Date('2026-10-01T18:00:00'),
-    createdAt: new Date('2026-09-01T09:00:00'),
-  },
-  {
-    id: 'p2',
-    title: 'Best lunch option in the cafeteria',
-    category: 'Lifestyle & Preferences',
-    createdAt: new Date('2026-09-05T09:00:00'),
-  },
-  {
-    id: 'p3',
-    title: 'Team event in October',
-    description: "We're looking for a format for our team afternoon.",
-    category: 'Team Activities',
-    deadline: new Date('2026-09-20T18:00:00'),
-    createdAt: new Date('2026-09-08T09:00:00'),
-  },
-  {
-    id: 'p4',
-    title: 'Should we introduce pair programming?',
-    category: 'Technology & Innovation',
-    deadline: new Date('2026-09-17T18:00:00'),
-    createdAt: new Date('2026-09-10T09:00:00'),
-  },
-  {
-    id: 'p5',
-    title: 'Favorite editor theme',
-    category: 'Technology & Innovation',
-    deadline: new Date('2026-08-01T18:00:00'),
-    createdAt: new Date('2026-07-20T09:00:00'),
-  },
-  {
-    id: 'p6',
-    title: 'How should we improve our office wellness program?',
-    description: 'Let us know what would help you feel better at work.',
-    category: 'Health & Wellness',
-    deadline: new Date('2026-09-25T18:00:00'),
-    createdAt: new Date('2026-09-12T09:00:00'),
-  },
-  {
-    id: 'p7',
-    title: 'Which game night should we host next?',
-    category: 'Gaming & Entertainment',
-    deadline: new Date('2026-09-29T18:00:00'),
-    createdAt: new Date('2026-09-13T09:00:00'),
-  },
-];
-
-const FAKE_QUESTIONS: PollQuestion[] = [
-  { id: 'p1-q1', pollId: 'p1', text: 'Which programming language should we learn next?', allowMultiple: false, sortOrder: 0 },
-  { id: 'p1-q2', pollId: 'p1', text: 'How many hours per week can you dedicate to learning it?', allowMultiple: false, sortOrder: 1 },
-  { id: 'p2-q1', pollId: 'p2', text: 'Best lunch option in the cafeteria', allowMultiple: false, sortOrder: 0 },
-  { id: 'p3-q1', pollId: 'p3', text: 'Team event in October', allowMultiple: false, sortOrder: 0 },
-  { id: 'p3-q2', pollId: 'p3', text: 'Which day works best?', allowMultiple: false, sortOrder: 1 },
-  { id: 'p4-q1', pollId: 'p4', text: 'Should we introduce pair programming?', allowMultiple: false, sortOrder: 0 },
-  { id: 'p5-q1', pollId: 'p5', text: 'Favorite editor theme', allowMultiple: false, sortOrder: 0 },
-  { id: 'p6-q1', pollId: 'p6', text: 'How should we improve our office wellness program?', allowMultiple: true, sortOrder: 0 },
-  { id: 'p6-q2', pollId: 'p6', text: 'Preferred format for feedback sessions?', allowMultiple: false, sortOrder: 1 },
-  { id: 'p7-q1', pollId: 'p7', text: 'Which game night should we host next?', allowMultiple: false, sortOrder: 0 },
-];
-
-const FAKE_OPTIONS: PollOption[] = [
-  { id: 'p1-o1', questionId: 'p1-q1', text: 'TypeScript', sortOrder: 0 },
-  { id: 'p1-o2', questionId: 'p1-q1', text: 'Python', sortOrder: 1 },
-  { id: 'p1-o3', questionId: 'p1-q1', text: 'Rust', sortOrder: 2 },
-  { id: 'p1-o4', questionId: 'p1-q1', text: 'Go', sortOrder: 3 },
-
-  { id: 'p1-o5', questionId: 'p1-q2', text: '1-2 hours', sortOrder: 0 },
-  { id: 'p1-o6', questionId: 'p1-q2', text: '3-5 hours', sortOrder: 1 },
-  { id: 'p1-o7', questionId: 'p1-q2', text: '6-10 hours', sortOrder: 2 },
-  { id: 'p1-o8', questionId: 'p1-q2', text: '10+ hours', sortOrder: 3 },
-
-  { id: 'p2-o1', questionId: 'p2-q1', text: 'Pasta', sortOrder: 0 },
-  { id: 'p2-o2', questionId: 'p2-q1', text: 'Salad bar', sortOrder: 1 },
-  { id: 'p2-o3', questionId: 'p2-q1', text: 'Wraps', sortOrder: 2 },
-  { id: 'p2-o4', questionId: 'p2-q1', text: 'Soup', sortOrder: 3 },
-
-  { id: 'p3-o1', questionId: 'p3-q1', text: 'Bowling', sortOrder: 0 },
-  { id: 'p3-o2', questionId: 'p3-q1', text: 'Escape room', sortOrder: 1 },
-  { id: 'p3-o3', questionId: 'p3-q1', text: 'Barbecue', sortOrder: 2 },
-  { id: 'p3-o4', questionId: 'p3-q1', text: 'Climbing park', sortOrder: 3 },
-
-  { id: 'p3-o5', questionId: 'p3-q2', text: 'Monday', sortOrder: 0 },
-  { id: 'p3-o6', questionId: 'p3-q2', text: 'Wednesday', sortOrder: 1 },
-  { id: 'p3-o7', questionId: 'p3-q2', text: 'Friday', sortOrder: 2 },
-
-  { id: 'p4-o1', questionId: 'p4-q1', text: 'Yes, always', sortOrder: 0 },
-  { id: 'p4-o2', questionId: 'p4-q1', text: 'Only for complex tasks', sortOrder: 1 },
-  { id: 'p4-o3', questionId: 'p4-q1', text: 'No', sortOrder: 2 },
-
-  { id: 'p5-o1', questionId: 'p5-q1', text: 'Dark', sortOrder: 0 },
-  { id: 'p5-o2', questionId: 'p5-q1', text: 'Light', sortOrder: 1 },
-  { id: 'p5-o3', questionId: 'p5-q1', text: 'Solarized', sortOrder: 2 },
-  { id: 'p5-o4', questionId: 'p5-q1', text: 'High Contrast', sortOrder: 3 },
-
-  { id: 'p6-o1', questionId: 'p6-q1', text: 'More standing desks', sortOrder: 0 },
-  { id: 'p6-o2', questionId: 'p6-q1', text: 'Yoga sessions', sortOrder: 1 },
-  { id: 'p6-o3', questionId: 'p6-q1', text: 'Healthy snacks', sortOrder: 2 },
-  { id: 'p6-o4', questionId: 'p6-q1', text: 'Mental health days', sortOrder: 3 },
-
-  { id: 'p6-o5', questionId: 'p6-q2', text: 'Anonymous surveys', sortOrder: 0 },
-  { id: 'p6-o6', questionId: 'p6-q2', text: 'Team town halls', sortOrder: 1 },
-  { id: 'p6-o7', questionId: 'p6-q2', text: '1:1 check-ins', sortOrder: 2 },
-
-  { id: 'p7-o1', questionId: 'p7-q1', text: 'Board games', sortOrder: 0 },
-  { id: 'p7-o2', questionId: 'p7-q1', text: 'Trivia night', sortOrder: 1 },
-  { id: 'p7-o3', questionId: 'p7-q1', text: 'Video games tournament', sortOrder: 2 },
-  { id: 'p7-o4', questionId: 'p7-q1', text: 'Escape room', sortOrder: 3 },
-];
-
-// Seed votes use fake voter ids (never the real localStorage voter_id), so
-// they show up in results without making the app think the current browser
-// has already voted.
-function seedVotes(entries: { questionId: string; pollOptionId: string; voterIds: string[] }[]): Vote[] {
-  return entries.flatMap(({ questionId, pollOptionId, voterIds }) =>
-    voterIds.map((voterId) => ({
-      id: `seed-${pollOptionId}-${voterId}`,
-      questionId,
-      pollOptionId,
-      voterId,
-    })),
-  );
+interface PollRow {
+  id: string;
+  title: string;
+  description: string | null;
+  category: string;
+  deadline: string | null;
+  created_at: string;
 }
 
-const FAKE_VOTES: Vote[] = seedVotes([
-  { questionId: 'p1-q1', pollOptionId: 'p1-o1', voterIds: ['v1', 'v2', 'v3', 'v4', 'v5'] },
-  { questionId: 'p1-q1', pollOptionId: 'p1-o2', voterIds: ['v6', 'v7', 'v8'] },
-  { questionId: 'p1-q1', pollOptionId: 'p1-o3', voterIds: ['v9', 'v10'] },
-  { questionId: 'p1-q1', pollOptionId: 'p1-o4', voterIds: ['v11'] },
+interface QuestionRow {
+  id: string;
+  poll_id: string;
+  text: string;
+  allow_multiple: boolean;
+  sort_order: number;
+}
 
-  { questionId: 'p1-q2', pollOptionId: 'p1-o5', voterIds: ['v1', 'v2'] },
-  { questionId: 'p1-q2', pollOptionId: 'p1-o6', voterIds: ['v3', 'v4', 'v5', 'v6'] },
-  { questionId: 'p1-q2', pollOptionId: 'p1-o7', voterIds: ['v7'] },
+interface PollOptionRow {
+  id: string;
+  question_id: string;
+  text: string;
+  sort_order: number;
+}
 
-  { questionId: 'p2-q1', pollOptionId: 'p2-o1', voterIds: ['v1', 'v2', 'v3'] },
-  { questionId: 'p2-q1', pollOptionId: 'p2-o2', voterIds: ['v4', 'v5'] },
-  { questionId: 'p2-q1', pollOptionId: 'p2-o3', voterIds: ['v6'] },
-  { questionId: 'p2-q1', pollOptionId: 'p2-o4', voterIds: ['v7', 'v8', 'v9', 'v10'] },
+interface VoteRow {
+  id: string;
+  poll_option_id: string;
+  question_id: string;
+}
 
-  { questionId: 'p3-q1', pollOptionId: 'p3-o1', voterIds: ['v1', 'v2'] },
-  { questionId: 'p3-q1', pollOptionId: 'p3-o2', voterIds: ['v3', 'v4', 'v5', 'v6', 'v7'] },
-  { questionId: 'p3-q1', pollOptionId: 'p3-o3', voterIds: ['v8'] },
-  { questionId: 'p3-q1', pollOptionId: 'p3-o4', voterIds: ['v9', 'v10', 'v11'] },
+function toPoll(row: PollRow): Poll {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description ?? undefined,
+    category: row.category as PollCategory,
+    deadline: row.deadline ? new Date(row.deadline) : undefined,
+    createdAt: new Date(row.created_at),
+  };
+}
 
-  { questionId: 'p3-q2', pollOptionId: 'p3-o5', voterIds: ['v1'] },
-  { questionId: 'p3-q2', pollOptionId: 'p3-o6', voterIds: ['v2', 'v3', 'v4', 'v5'] },
-  { questionId: 'p3-q2', pollOptionId: 'p3-o7', voterIds: ['v6', 'v7'] },
+function toPollQuestion(row: QuestionRow): PollQuestion {
+  return {
+    id: row.id,
+    pollId: row.poll_id,
+    text: row.text,
+    allowMultiple: row.allow_multiple,
+    sortOrder: row.sort_order,
+  };
+}
 
-  // allowMultiple: same voter can appear under more than one option.
-  { questionId: 'p6-q1', pollOptionId: 'p6-o1', voterIds: ['v1', 'v2', 'v3'] },
-  { questionId: 'p6-q1', pollOptionId: 'p6-o2', voterIds: ['v1', 'v4', 'v5'] },
-  { questionId: 'p6-q1', pollOptionId: 'p6-o3', voterIds: ['v2', 'v3', 'v6', 'v7'] },
-  { questionId: 'p6-q1', pollOptionId: 'p6-o4', voterIds: ['v4', 'v5', 'v6', 'v7', 'v8'] },
+function toPollOption(row: PollOptionRow): PollOption {
+  return { id: row.id, questionId: row.question_id, text: row.text, sortOrder: row.sort_order };
+}
 
-  { questionId: 'p6-q2', pollOptionId: 'p6-o5', voterIds: ['v1', 'v2', 'v3', 'v4'] },
-  { questionId: 'p6-q2', pollOptionId: 'p6-o6', voterIds: ['v5', 'v6'] },
-  { questionId: 'p6-q2', pollOptionId: 'p6-o7', voterIds: ['v7', 'v8', 'v9'] },
-
-  // p4, p5, p7 are left without seed votes, to also cover the zero-votes case.
-]);
+function toVote(row: VoteRow): Vote {
+  return { id: row.id, questionId: row.question_id, pollOptionId: row.poll_option_id };
+}
 
 @Injectable({ providedIn: 'root' })
 export class PollsService {
-  private readonly polls = signal<Poll[]>(FAKE_POLLS);
-  private readonly questions = signal<PollQuestion[]>(FAKE_QUESTIONS);
-  private readonly options = signal<PollOption[]>(FAKE_OPTIONS);
-  private readonly votes = signal<Vote[]>(FAKE_VOTES);
+  private readonly toastService = inject(ToastService);
+
+  private readonly polls = signal<Poll[]>([]);
+  private readonly questions = signal<PollQuestion[]>([]);
+  private readonly options = signal<PollOption[]>([]);
+  private readonly votes = signal<Vote[]>([]);
+
+  constructor() {
+    this.loadAll();
+    this.subscribeToVotes();
+  }
 
   listPolls(): Signal<PollWithQuestions[]> {
     return computed(() => this.polls().map((poll) => this.attachQuestions(poll)));
@@ -228,64 +127,112 @@ export class PollsService {
     });
   }
 
-  hasVoted(questionId: string): Signal<boolean> {
-    const voterId = getVoterId();
-    return computed(() => this.votes().some((v) => v.questionId === questionId && v.voterId === voterId));
-  }
+  async createPoll(input: NewPollInput): Promise<string> {
+    const { data: pollRow, error: pollError } = await supabase
+      .from('polls')
+      .insert({
+        title: input.title,
+        description: input.description ?? null,
+        category: input.category,
+        deadline: input.deadline ? input.deadline.toISOString() : null,
+      })
+      .select()
+      .single();
+    if (pollError || !pollRow) {
+      this.toastService.show('Could not create the survey. Please try again.');
+      throw pollError;
+    }
 
-  createPoll(input: NewPollInput): string {
-    const pollId = crypto.randomUUID();
-    const poll: Poll = {
-      id: pollId,
-      title: input.title,
-      description: input.description,
-      category: input.category,
-      deadline: input.deadline,
-      createdAt: new Date(),
-    };
+    const newQuestions: QuestionWithOptions[] = [];
+    for (const [index, questionInput] of input.questions.entries()) {
+      const { data: questionRow, error: questionError } = await supabase
+        .from('questions')
+        .insert({
+          poll_id: pollRow.id,
+          text: questionInput.text,
+          allow_multiple: questionInput.allowMultiple,
+          sort_order: index,
+        })
+        .select()
+        .single();
+      if (questionError || !questionRow) {
+        this.toastService.show('Could not create the survey. Please try again.');
+        throw questionError;
+      }
 
-    const newQuestions: PollQuestion[] = [];
-    const newOptions: PollOption[] = [];
-    input.questions.forEach((questionInput, questionIndex) => {
-      const questionId = crypto.randomUUID();
-      newQuestions.push({
-        id: questionId,
-        pollId,
-        text: questionInput.text,
-        allowMultiple: questionInput.allowMultiple,
-        sortOrder: questionIndex,
-      });
-      questionInput.optionTexts.forEach((text, optionIndex) => {
-        newOptions.push({
-          id: crypto.randomUUID(),
-          questionId,
-          text,
-          sortOrder: optionIndex,
-        });
-      });
-    });
+      const { data: optionRows, error: optionsError } = await supabase
+        .from('poll_options')
+        .insert(
+          questionInput.optionTexts.map((text, optionIndex) => ({
+            question_id: questionRow.id,
+            text,
+            sort_order: optionIndex,
+          })),
+        )
+        .select();
+      if (optionsError || !optionRows) {
+        this.toastService.show('Could not create the survey. Please try again.');
+        throw optionsError;
+      }
 
-    this.polls.update((polls) => [...polls, poll]);
-    this.questions.update((questions) => [...questions, ...newQuestions]);
-    this.options.update((options) => [...options, ...newOptions]);
+      newQuestions.push({ ...toPollQuestion(questionRow), options: optionRows.map(toPollOption) });
+    }
 
-    return pollId;
+    this.polls.update((polls) => [...polls, toPoll(pollRow)]);
+    this.questions.update((qs) => [...qs, ...newQuestions.map(({ options: _options, ...q }) => q)]);
+    this.options.update((os) => [...os, ...newQuestions.flatMap((q) => q.options)]);
+
+    return pollRow.id;
   }
 
   vote(questionId: string, pollOptionId: string): void {
-    const voterId = getVoterId();
-    const question = this.questions().find((q) => q.id === questionId);
-    if (!question) {
+    const id = crypto.randomUUID();
+    this.votes.update((votes) => [...votes, { id, questionId, pollOptionId }]);
+
+    supabase
+      .from('votes')
+      .insert({ id, question_id: questionId, poll_option_id: pollOptionId })
+      .then(({ error }) => {
+        if (error) {
+          this.votes.update((votes) => votes.filter((v) => v.id !== id));
+          this.toastService.show('Vote failed, please try again.');
+        }
+      });
+  }
+
+  private async loadAll(): Promise<void> {
+    const [pollsRes, questionsRes, optionsRes, votesRes] = await Promise.all([
+      supabase.from('polls').select().returns<PollRow[]>(),
+      supabase.from('questions').select().returns<QuestionRow[]>(),
+      supabase.from('poll_options').select().returns<PollOptionRow[]>(),
+      supabase.from('votes').select().returns<VoteRow[]>(),
+    ]);
+
+    if (pollsRes.error || questionsRes.error || optionsRes.error || votesRes.error) {
+      console.error('Failed to load polls from Supabase', {
+        pollsError: pollsRes.error,
+        questionsError: questionsRes.error,
+        optionsError: optionsRes.error,
+        votesError: votesRes.error,
+      });
+      this.toastService.show('Could not load surveys.');
       return;
     }
-    const existingForQuestion = this.votes().filter((v) => v.questionId === questionId && v.voterId === voterId);
-    if (!question.allowMultiple && existingForQuestion.length > 0) {
-      return;
-    }
-    if (existingForQuestion.some((v) => v.pollOptionId === pollOptionId)) {
-      return;
-    }
-    this.votes.update((votes) => [...votes, { id: crypto.randomUUID(), questionId, pollOptionId, voterId }]);
+
+    this.polls.set(pollsRes.data.map(toPoll));
+    this.questions.set(questionsRes.data.map(toPollQuestion));
+    this.options.set(optionsRes.data.map(toPollOption));
+    this.votes.set(votesRes.data.map(toVote));
+  }
+
+  private subscribeToVotes(): void {
+    supabase
+      .channel('votes-changes')
+      .on<VoteRow>('postgres_changes', { event: 'INSERT', schema: 'public', table: 'votes' }, ({ new: row }) => {
+        const vote = toVote(row);
+        this.votes.update((votes) => (votes.some((v) => v.id === vote.id) ? votes : [...votes, vote]));
+      })
+      .subscribe();
   }
 
   private optionsForQuestion(questionId: string): PollOption[] {
