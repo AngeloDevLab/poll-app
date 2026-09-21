@@ -2,6 +2,8 @@
 // Named by hue/tone (not by usage) since the same color is reused across
 // unrelated roles (e.g. $color-orange shows up in buttons, chevrons and bars).
 
+@forward 'asset-base';
+
 // Colors
 $color-plum: #35273a;
 $color-plum-dark: #221227;

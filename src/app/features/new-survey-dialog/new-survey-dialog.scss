@@ -120,7 +120,7 @@
     background-color: rgba($color: $color-orange-light, $alpha: 0.4);
 
     input[type='checkbox']:not(:checked) {
-      background-image: url('/icons/checkbox-hover.svg');
+      background-image: url('#{$asset-base}/icons/checkbox-hover.svg');
     }
   }
 

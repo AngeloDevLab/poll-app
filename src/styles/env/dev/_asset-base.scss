@@ -1,0 +1,8 @@
+// Prefix for the absolute /icons, /images, /fonts references used in CSS
+// url(). Empty here (dev - app is served from the domain root); swapped via
+// angular.json's production `fileReplacements` for _asset-base.prod.scss,
+// which sets this to the FTP subpath the app is deployed under. Template
+// src/href attributes don't need this - they use relative (./...) paths
+// instead and rely on <base href> at runtime, since relative url()s in CSS
+// break the build (esbuild tries to resolve them as local files).
+$asset-base: '';

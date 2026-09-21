@@ -178,7 +178,7 @@
   }
 
   &__chevron {
-    @include mask-icon('/icons/chevron.svg', 0.75rem);
+    @include mask-icon('#{$asset-base}/icons/chevron.svg', 0.75rem);
     transform: rotate(0deg);
     transition: transform 0.15s ease-out;
 

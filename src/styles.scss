@@ -1,4 +1,5 @@
 @use './styles/buttons';
+@use './styles/tokens' as *;
 
 * {
     margin: 0;
@@ -14,7 +15,7 @@ body {
 
 @font-face {
     font-family: 'Mulish';
-    src: url('/fonts/mulish/Mulish-Bold.woff2') format('woff2');
+    src: url('#{$asset-base}/fonts/mulish/Mulish-Bold.woff2') format('woff2');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -22,7 +23,7 @@ body {
 
 @font-face {
     font-family: 'Mulish';
-    src: url('/fonts/mulish/Mulish-Medium.woff2') format('woff2');
+    src: url('#{$asset-base}/fonts/mulish/Mulish-Medium.woff2') format('woff2');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -30,7 +31,7 @@ body {
 
 @font-face {
     font-family: 'Mulish';
-    src: url('/fonts/mulish/Mulish-Regular.woff2') format('woff2');
+    src: url('#{$asset-base}/fonts/mulish/Mulish-Regular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -38,7 +39,7 @@ body {
 
 @font-face {
     font-family: 'Mulish';
-    src: url('/fonts/mulish/Mulish-SemiBold.woff2') format('woff2');
+    src: url('#{$asset-base}/fonts/mulish/Mulish-SemiBold.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -46,7 +47,7 @@ body {
 
 @font-face {
     font-family: 'Nerko One';
-    src: url('/fonts/nerko-one/NerkoOne-Regular.woff2') format('woff2');
+    src: url('#{$asset-base}/fonts/nerko-one/NerkoOne-Regular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -54,7 +55,7 @@ body {
 
 @font-face {
     font-family: 'Nokora';
-    src: url('/fonts/nokora/Nokora-Bold.woff2') format('woff2');
+    src: url('#{$asset-base}/fonts/nokora/Nokora-Bold.woff2') format('woff2');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -62,7 +63,7 @@ body {
 
 @font-face {
     font-family: 'Nokora';
-    src: url('/fonts/nokora/Nokora-Regular.woff2') format('woff2');
+    src: url('#{$asset-base}/fonts/nokora/Nokora-Regular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

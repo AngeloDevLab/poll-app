@@ -35,7 +35,7 @@
   }
 
   &__chevron {
-    @include mask-icon('/icons/chevron.svg', 1rem);
+    @include mask-icon('#{$asset-base}/icons/chevron.svg', 1rem);
   }
 
   &__panel {

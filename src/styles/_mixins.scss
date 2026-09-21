@@ -45,13 +45,13 @@
   flex-shrink: 0;
   border-radius: 3px;
   background-color: $bg;
-  background-image: url('/icons/checkbox-default.svg');
+  background-image: url('#{$asset-base}/icons/checkbox-default.svg');
   background-repeat: no-repeat;
   background-size: contain;
   cursor: pointer;
 
   &:checked {
-    background-image: url('/icons/checkbox-checked.svg');
+    background-image: url('#{$asset-base}/icons/checkbox-checked.svg');
   }
 }
 

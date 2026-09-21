@@ -69,12 +69,19 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "/angular-projects/poll-app/",
+              "stylePreprocessorOptions": {
+                "includePaths": ["src/styles/env/prod"]
+              }
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "stylePreprocessorOptions": {
+                "includePaths": ["src/styles/env/dev"]
+              }
             }
           },
           "defaultConfiguration": "production"
