@@ -1,6 +1,7 @@
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { CompletedPollsService } from '../../core/completed-polls.service';
 import { PollResult } from '../../core/models/poll.model';
 import { PollsService, QuestionWithOptions } from '../../core/polls.service';
 
@@ -12,6 +13,7 @@ import { PollsService, QuestionWithOptions } from '../../core/polls.service';
 })
 export class PollDetail {
   private readonly pollsService = inject(PollsService);
+  private readonly completedPolls = inject(CompletedPollsService);
   private readonly router = inject(Router);
 
   readonly id = input.required<string>();
@@ -28,8 +30,8 @@ export class PollDetail {
 
   protected readonly resultsExpanded = signal(true);
 
-  // Completed (via Complete) this visit. No cross-visit vote-locking - see CLAUDE.md.
-  protected readonly hasCompleted = signal(false);
+  // Persisted per-browser via CompletedPollsService, not DB-backed vote-locking.
+  protected readonly hasCompleted = computed(() => this.completedPolls.isCompleted(this.id()));
 
   protected readonly canComplete = computed(() => {
     const poll = this.poll();
@@ -86,7 +88,7 @@ export class PollDetail {
         this.pollsService.vote(question.id, optionId);
       }
     }
-    this.hasCompleted.set(true);
+    this.completedPolls.markCompleted(poll.id);
     this.resultsExpanded.set(true);
   }
 
