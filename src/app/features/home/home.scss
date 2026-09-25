@@ -133,7 +133,11 @@
   }
 
   .empty {
-    color: #666;
+    // Span both columns of the desktop grid instead of sitting in the left one.
+    grid-column: 1 / -1;
+    font-family: $font-body;
+    font-weight: 500;
+    color: $color-lavender;
   }
 }
 

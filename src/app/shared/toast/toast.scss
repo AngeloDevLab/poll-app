@@ -7,13 +7,15 @@
   bottom: 2rem;
   z-index: 1000;
   transform: translateX(-50%);
-  padding: 12px 20px;
-  @include accent-corner(10px, 20px);
-  background-color: $color-plum;
-  color: $color-white;
-  font-family: $font-body;
-  font-weight: 600;
-  font-size: 0.9375rem;
+  width: max-content;
+  max-width: min(480px, calc(100vw - 2rem));
+  padding: 22px 24px 89px 26px;
+  @include accent-corner(5px, 50px);
+  background-color: $color-orange-pale;
+  color: $color-plum-dark;
+  font-family: $font-heading;
+  font-weight: 400;
+  font-size: 1.5rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   animation: toast-in 0.2s ease-out;
 }

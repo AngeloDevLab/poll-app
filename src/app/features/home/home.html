@@ -59,7 +59,7 @@
       @for (poll of visiblePolls(); track poll.id) {
       <app-poll-card [poll]="poll" [clickable]="activeTab() === 'running'" />
       } @empty {
-      <p class="empty">No survey active.</p>
+      <p class="empty">{{ activeTab() === 'running' ? 'No active surveys yet.' : 'No past surveys yet.' }}</p>
       }
     </div>
   </div>
