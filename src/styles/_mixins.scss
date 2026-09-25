@@ -1,5 +1,13 @@
 @use 'tokens' as *;
 
+// Desktop layout switch. Only for real layout changes (columns, side-by-side
+// panels); sizes and spacing scale fluidly via clamp() instead.
+@mixin desktop {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
 // The recurring "signature" corner treatment: mostly square, one big
 // rounded corner on the top-right.
 @mixin accent-corner($radius: 5px, $accent: 20px) {

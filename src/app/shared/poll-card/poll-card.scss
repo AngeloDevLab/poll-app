@@ -1,13 +1,19 @@
 @use '../../../styles/tokens' as *;
 @use '../../../styles/mixins' as *;
 
+:host {
+  display: block;
+}
+
 .poll-card {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   padding: 0.75rem 1rem;
   background-color: rgba($color: $color-grey, $alpha: 0.08);
   @include accent-corner(5px, 50px);
   cursor: pointer;
+  min-height: 150px;
 
   &__category {
     margin-bottom: 0.5rem;
@@ -41,10 +47,16 @@
   &--ending-soon {
     justify-content: space-between;
     background-color: $color-lavender;
-    min-height: 230px;
+    min-height: 250px;
     min-width: 250px;
     border-top-right-radius: 80px;
-    padding: 1.5rem 1rem;
+    padding: 24px 15px;
+
+    @include desktop {
+      padding: 40px 44px 60px 44px;
+      min-height: 330px;
+      min-width: 330px;
+    }
 
     .poll-card__category {
       font-family: $font-body;
@@ -64,7 +76,7 @@
     }
 
     &:hover {
-     background-color: $color-lavender-hover;
+      background-color: $color-lavender-hover;
     }
   }
 }

@@ -21,6 +21,9 @@ $color-grey: #d9d9d9;
 $color-grey-light: #ededed;
 $color-red: #ffada5;
 
+// Breakpoints (mobile-first: styles outside a breakpoint are the mobile base)
+$breakpoint-desktop: 1024px;
+
 // Fonts
 $font-heading: 'Nerko One', cursive;
 $font-body: 'Mulish', sans-serif;
