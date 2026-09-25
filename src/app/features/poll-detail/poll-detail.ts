@@ -57,7 +57,11 @@ export class PollDetail {
   }
 
   protected isSelected(question: QuestionWithOptions, optionId: string): boolean {
-    return (this.selections().get(question.id) ?? []).includes(optionId);
+    // Once submitted, show the stored picks (also after a reload) instead of the local ones.
+    const picked = this.hasCompleted()
+      ? this.completedPolls.selectionsFor(this.id())[question.id]
+      : this.selections().get(question.id);
+    return (picked ?? []).includes(optionId);
   }
 
   protected toggleOption(question: QuestionWithOptions, optionId: string): void {
@@ -90,7 +94,7 @@ export class PollDetail {
         this.pollsService.vote(question.id, optionId);
       }
     }
-    this.completedPolls.markCompleted(poll.id);
+    this.completedPolls.markCompleted(poll.id, Object.fromEntries(this.selections()));
     this.resultsExpanded.set(true);
   }
 

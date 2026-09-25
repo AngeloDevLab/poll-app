@@ -121,6 +121,13 @@
               </span>
             </button>
           </div>
+          } @else if (hasCompleted()) {
+          <div class="poll-detail-panel__complete">
+            <p class="poll-detail-panel__completed" role="status">
+              <img src="./icons/check.svg" alt="">
+              Thanks! You've completed this survey.
+            </p>
+          </div>
           }
         </form>
 

@@ -136,6 +136,18 @@
     justify-content: end;
   }
 
+  // Replaces the Complete button once this browser has submitted the poll.
+  &__completed {
+    @include status-pill($color-orange-light, 6px 12px);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    img {
+      width: 1rem;
+    }
+  }
+
   // "Complete" on mobile, "Complete survey" on desktop.
   &__complete-suffix {
     display: none;
