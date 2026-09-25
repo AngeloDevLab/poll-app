@@ -67,6 +67,7 @@
 // around the top-left illustration.
 @mixin detail-shell-inner {
   max-width: 1040px;
+  margin: 0 auto;
 
   > img {
     margin-top: 3rem;

@@ -1,8 +1,9 @@
 @if (poll(); as poll) {
-<ng-template #resultsPanel let-live="live">
+<!-- Rendered twice: collapsible inside the panel (mobile), always open beside it (desktop). -->
+<ng-template #resultsPanel let-live="live" let-collapsible="collapsible">
   <section class="results-panel">
     <div class="results-panel__header">
-      @if (resultsExpanded()) {
+      @if (!collapsible || resultsExpanded()) {
       <h2 class="results-panel__title">
         Survey results
         @if (live) {
@@ -10,13 +11,15 @@
         }
       </h2>
       }
+      @if (collapsible) {
       <button type="button" class="results-toggle" (click)="toggleResults()">
         <span>{{ resultsExpanded() ? 'Close results' : 'See results' }}</span>
         <span class="results-toggle__chevron" [class.results-toggle__chevron--open]="resultsExpanded()"></span>
       </button>
+      }
     </div>
 
-    @if (resultsExpanded()) {
+    @if (!collapsible || resultsExpanded()) {
     <ol class="results-list">
       @for (question of poll.questions; track question.id) {
       <li class="results-question">
@@ -41,76 +44,96 @@
 
 <div class="poll-detail">
   <div class="inner-poll-detail">
-    <img src="./images/logo-purple-dark.png" alt="logo">
+    <div class="poll-detail__top-bar">
+      <a routerLink="/" aria-label="Back to surveys">
+        <img src="./images/logo-purple-dark.png" alt="logo">
+      </a>
+      <button type="button" class="btn btn--primary poll-detail__create" (click)="createSurvey()">
+        <span>Create survey</span>
+        <span class="btn__icon">
+          <img src="./icons/add_circle.svg" alt="">
+        </span>
+      </button>
+    </div>
 
-    <div class="poll-detail-panel">
-      <header class="poll-detail-panel__header">
-        <div class="poll-detail-panel__header-top-bar">
-          <div class="poll-detail-panel__status" [class.poll-detail-panel__status--closed]="isClosed()">
-            {{ isClosed() ? 'Closed' : 'Published' }}
-          </div>
-          <button type="button" class="btn btn--secondary" (click)="close()" aria-label="Close">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="#35273A" stroke="#35273A" stroke-width="2"
-              stroke-linecap="round">
-              <line x1="6" y1="6" x2="18" y2="18" />
-              <line x1="18" y1="6" x2="6" y2="18" />
-            </svg>
-          </button>
-        </div>
-
-        <p class="poll-detail-panel__meta">
-          @if (poll.deadline) {
-          <span>Ends on {{ poll.deadline | date: 'dd.MM.yyyy' }}</span>
-          }
-          <span>Category: {{ poll.category }}</span>
-        </p>
-
-        <h1 class="poll-detail-panel__title">{{ poll.title }}</h1>
-        @if (poll.description) {
-        <p class="poll-detail-panel__description">{{ poll.description }}</p>
-        }
-      </header>
-
-      <form class="poll-detail-panel__questions" (submit)="complete($event)">
-        <ol class="questions-list">
-          @for (question of poll.questions; track question.id) {
-          <li class="question">
-            <div class="question__body">
-              <span class="question__text">{{ question.text }}</span>
-              @if (question.allowMultiple) {
-              <p class="question__hint">More than one answers are possible.</p>
-              }
-
-              <ul class="question__options">
-                @for (option of question.options; track option.id; let oi = $index) {
-                <li>
-                  <label class="option-row" [class.option-row--disabled]="isClosed() || hasCompleted()">
-                    <input type="checkbox" [checked]="isSelected(question, option.id)"
-                      [disabled]="isClosed() || hasCompleted()" (change)="toggleOption(question, option.id)" />
-                    <span class="option-row__letter">{{ optionLetter(oi) }}.</span>
-                    <span class="option-row__text">{{ option.text }}</span>
-                  </label>
-                </li>
-                }
-              </ul>
+    <div class="poll-detail-layout">
+      <div class="poll-detail-panel">
+        <header class="poll-detail-panel__header">
+          <div class="poll-detail-panel__header-top-bar">
+            <div class="poll-detail-panel__status" [class.poll-detail-panel__status--closed]="isClosed()">
+              {{ isClosed() ? 'Closed' : 'Published' }}
             </div>
-          </li>
+            <button type="button" class="btn btn--secondary poll-detail-panel__close" (click)="close()" aria-label="Close">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#35273A" stroke="#35273A" stroke-width="2"
+                stroke-linecap="round">
+                <line x1="6" y1="6" x2="18" y2="18" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+              </svg>
+            </button>
+          </div>
+
+          <p class="poll-detail-panel__meta">
+            @if (poll.deadline) {
+            <span>Ends on {{ poll.deadline | date: 'dd.MM.yyyy' }}</span>
+            }
+            <span>Category: {{ poll.category }}</span>
+          </p>
+
+          <h1 class="poll-detail-panel__title">{{ poll.title }}</h1>
+          @if (poll.description) {
+          <p class="poll-detail-panel__description">{{ poll.description }}</p>
           }
-        </ol>
+        </header>
 
-        @if (!isClosed() && !hasCompleted()) {
-        <div class="poll-detail-panel__complete">
-          <button type="submit" class="btn btn--primary" [disabled]="!canComplete()">
-            <span>Complete</span>
-            <span class="btn__icon">
-              <img src="./icons/check.svg" alt="">
-            </span>
-          </button>
+        <form class="poll-detail-panel__questions" (submit)="complete($event)">
+          <ol class="questions-list">
+            @for (question of poll.questions; track question.id) {
+            <li class="question">
+              <div class="question__body">
+                <span class="question__text">{{ question.text }}</span>
+                @if (question.allowMultiple) {
+                <p class="question__hint">More than one answers are possible.</p>
+                }
+
+                <ul class="question__options">
+                  @for (option of question.options; track option.id; let oi = $index) {
+                  <li>
+                    <label class="option-row" [class.option-row--disabled]="isClosed() || hasCompleted()">
+                      <input type="checkbox" [checked]="isSelected(question, option.id)"
+                        [disabled]="isClosed() || hasCompleted()" (change)="toggleOption(question, option.id)" />
+                      <span class="option-row__letter">{{ optionLetter(oi) }}.</span>
+                      <span class="option-row__text">{{ option.text }}</span>
+                    </label>
+                  </li>
+                  }
+                </ul>
+              </div>
+            </li>
+            }
+          </ol>
+
+          @if (!isClosed() && !hasCompleted()) {
+          <div class="poll-detail-panel__complete">
+            <button type="submit" class="btn btn--primary" [disabled]="!canComplete()">
+              <span>Complete<span class="poll-detail-panel__complete-suffix"> survey</span></span>
+              <span class="btn__icon">
+                <img src="./icons/check.svg" alt="">
+              </span>
+            </button>
+          </div>
+          }
+        </form>
+
+        <div class="poll-detail-panel__results">
+          <ng-container [ngTemplateOutlet]="resultsPanel"
+            [ngTemplateOutletContext]="{ live: !isClosed(), collapsible: true }" />
         </div>
-        }
-      </form>
+      </div>
 
-      <ng-container [ngTemplateOutlet]="resultsPanel" [ngTemplateOutletContext]="{ live: !isClosed() }" />
+      <div class="poll-detail-layout__results">
+        <ng-container [ngTemplateOutlet]="resultsPanel"
+          [ngTemplateOutletContext]="{ live: !isClosed(), collapsible: false }" />
+      </div>
     </div>
   </div>
 </div>

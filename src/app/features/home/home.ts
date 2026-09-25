@@ -1,5 +1,6 @@
-import { Component, computed, inject, signal, viewChild } from '@angular/core';
+import { Component, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { NewSurveyRequestService } from '../../core/new-survey-request.service';
 import { NewPollInput, PollWithQuestions, PollsService } from '../../core/polls.service';
 import { Dropdown } from '../../shared/dropdown/dropdown';
 import { PollCard } from '../../shared/poll-card/poll-card';
@@ -21,6 +22,7 @@ const ENDING_SOON_LIMIT = 3;
 export class Home {
   private readonly pollsService = inject(PollsService);
   private readonly router = inject(Router);
+  private readonly newSurveyRequest = inject(NewSurveyRequestService);
 
   protected readonly polls = this.pollsService.listPolls();
   protected readonly activeTab = signal<Tab>('running');
@@ -57,6 +59,15 @@ export class Home {
     const category = this.activeCategoryValue();
     return category === ALL_CATEGORIES ? polls : polls.filter((p) => p.category === category);
   });
+
+  constructor() {
+    // "Create survey" on another page navigates here and asks for the dialog.
+    afterNextRender(() => {
+      if (this.newSurveyRequest.consume()) {
+        this.openNewSurveyDialog();
+      }
+    });
+  }
 
   protected setTab(tab: Tab): void {
     this.activeTab.set(tab);

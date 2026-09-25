@@ -10,6 +10,43 @@
   @include detail-shell-inner;
 }
 
+// Same spacing the shell mixin gives a bare logo <img>.
+.poll-detail__top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 3rem 1rem;
+}
+
+// Mobile has the close X instead; desktop gets "Create survey".
+.poll-detail__create {
+  display: none;
+
+  @include desktop {
+    display: inline-flex;
+  }
+}
+
+// Mobile: just the panel (results live inside it).
+// Desktop: panel left, always-open results in their own column on the right.
+.poll-detail-layout {
+  @include desktop {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+    column-gap: 2.5rem;
+    align-items: start;
+  }
+
+  &__results {
+    display: none;
+
+    @include desktop {
+      display: block;
+      margin-top: 40px;
+    }
+  }
+}
+
 .poll-detail-panel {
   background-color: rgba($color: $color-mauve, $alpha: 0.1);
   border-top-right-radius: 100px;
@@ -18,11 +55,31 @@
   gap: 2rem;
   margin: 0 1rem 2.5rem;
 
+  @include desktop {
+    border-top-right-radius: 150px;
+  }
+
   &__header {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin: 40px 12px 0 12px;
+
+    @include desktop {
+      margin: 40px 40px 0;
+    }
+  }
+
+  &__close {
+    @include desktop {
+      display: none;
+    }
+  }
+
+  &__results {
+    @include desktop {
+      display: none;
+    }
   }
 
   &__header-top-bar {
@@ -68,11 +125,24 @@
     flex-direction: column;
     gap: 40px;
     margin: 0 12px;
+
+    @include desktop {
+      margin: 0 40px 40px;
+    }
   }
 
   &__complete {
     display: flex;
     justify-content: end;
+  }
+
+  // "Complete" on mobile, "Complete survey" on desktop.
+  &__complete-suffix {
+    display: none;
+
+    @include desktop {
+      display: inline;
+    }
   }
 }
 
@@ -83,6 +153,13 @@
   margin: 0;
   padding-left: 1.25rem;
   list-style-position: outside;
+
+  @include desktop {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 3rem;
+    row-gap: 2.5rem;
+  }
 }
 
 .question {

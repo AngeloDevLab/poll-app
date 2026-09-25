@@ -1,13 +1,14 @@
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CompletedPollsService } from '../../core/completed-polls.service';
+import { NewSurveyRequestService } from '../../core/new-survey-request.service';
 import { PollResult } from '../../core/models/poll.model';
 import { PollsService, QuestionWithOptions } from '../../core/polls.service';
 
 @Component({
   selector: 'app-poll-detail',
-  imports: [DatePipe, NgTemplateOutlet],
+  imports: [DatePipe, NgTemplateOutlet, RouterLink],
   templateUrl: './poll-detail.html',
   styleUrl: './poll-detail.scss',
 })
@@ -15,6 +16,7 @@ export class PollDetail {
   private readonly pollsService = inject(PollsService);
   private readonly completedPolls = inject(CompletedPollsService);
   private readonly router = inject(Router);
+  private readonly newSurveyRequest = inject(NewSurveyRequestService);
 
   readonly id = input.required<string>();
 
@@ -106,6 +108,11 @@ export class PollDetail {
   }
 
   protected close(): void {
+    this.router.navigate(['/']);
+  }
+
+  protected createSurvey(): void {
+    this.newSurveyRequest.request();
     this.router.navigate(['/']);
   }
 }
