@@ -5,6 +5,7 @@ import { Dropdown } from '../../shared/dropdown/dropdown';
 import { PollCard } from '../../shared/poll-card/poll-card';
 import { NewSurveyDialog } from '../new-survey-dialog/new-survey-dialog';
 import { SurveyPublishedDialog } from '../survey-published-dialog/survey-published-dialog';
+import { HeroIllustration } from './hero-illustration/hero-illustration';
 
 type Tab = 'running' | 'closed';
 
@@ -13,7 +14,7 @@ const ENDING_SOON_LIMIT = 3;
 
 @Component({
   selector: 'app-home',
-  imports: [PollCard, Dropdown, NewSurveyDialog, SurveyPublishedDialog],
+  imports: [PollCard, Dropdown, NewSurveyDialog, SurveyPublishedDialog, HeroIllustration],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

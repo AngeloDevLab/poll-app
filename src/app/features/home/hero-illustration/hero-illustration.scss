@@ -1,0 +1,165 @@
+@use 'sass:math';
+
+// Timeline (all in one place so the sequence is easy to retime):
+// pieces pop in one after another, then the typing dots loop forever.
+$pop-duration: 0.5s;
+$intro-end: 1.5s;
+$typing-cycle: 2.5s; // one wave + pause, then it repeats
+$typing-jump: 0.7s;  // how long a single dot's jump takes
+
+:host {
+  display: block;
+  // Square like anim-handy.png (520x520); the parent only sets the height.
+  aspect-ratio: 1;
+}
+
+.illustration {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  &__base {
+    width: 100%;
+    height: 100%;
+    animation: fade-up 0.6s ease-out both;
+  }
+}
+
+// Every piece is positioned in % of the 520x520 handy frame, so the whole
+// illustration scales as one. Exact values: take X/Y/W from Figma and
+// divide by 520 (e.g. X = 364px -> 364 / 520 = 70%).
+.piece {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  transform-origin: var(--origin, center);
+  animation: pop-in $pop-duration cubic-bezier(0.34, 1.56, 0.64, 1) var(--delay) both;
+
+  &--bubble {
+    --x: 4%;
+    --y: 15%;
+    --w: 33%;
+    --delay: 0.4s;
+    --origin: 85% 90%; // grows out of the speech tail
+  }
+
+  &--question {
+    --x: 70%;
+    --y: 4%;
+    --w: 19%;
+    --delay: 0.6s;
+  }
+
+  &--check {
+    --x: 76%;
+    --y: 60%;
+    --w: 20%;
+    --delay: 0.8s;
+  }
+
+  &--star {
+    --x: 6%;
+    --y: 78%;
+    --w: 19%;
+    --delay: 1s;
+  }
+}
+
+.typing-dot {
+  animation: typing-wave $typing-cycle ease-in-out infinite;
+
+  &:nth-child(1) { animation-delay: $intro-end; }
+  &:nth-child(2) { animation-delay: $intro-end + 0.15s; }
+  &:nth-child(3) { animation-delay: $intro-end + 0.3s; }
+}
+
+// Rotate/draw parts around their own center, not the SVG's origin (0 0).
+.question-glyph,
+.star-shape {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.check-mark {
+  // Together with pathLength="1": one dash = the whole stroke.
+  stroke-dasharray: 1;
+}
+
+// Hover only for real mouse devices (same rule as .btn--primary) and only
+// when the user hasn't asked for reduced motion.
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .illustration:hover {
+    .check-mark {
+      animation: draw-check 0.6s ease-out;
+    }
+
+    .star-shape {
+      animation: spin 0.8s ease-in-out;
+    }
+
+    .question-glyph {
+      animation: wobble 0.6s ease-in-out;
+    }
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+// Units are SVG viewBox units (bubble is 172 wide), so the jump scales too.
+// Each dot jumps within the first $typing-jump of the cycle, then rests.
+$jump-end: math.div($typing-jump, $typing-cycle) * 100%;
+
+@keyframes typing-wave {
+  0%, #{$jump-end}, 100% {
+    transform: translateY(0);
+  }
+
+  #{math.div($jump-end, 2)} {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes draw-check {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wobble {
+  20% { transform: rotate(-15deg); }
+  40% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(4deg); }
+}
+
+// Users who asked the OS for less motion get the finished picture right away.
+@media (prefers-reduced-motion: reduce) {
+  .illustration__base,
+  .piece,
+  .typing-dot {
+    animation: none;
+  }
+}
