@@ -1,4 +1,23 @@
+@use 'sass:math';
 @use 'tokens' as *;
+
+// Fluid value: $mobile at the $fluid-from viewport width, $desktop at $fluid-to,
+// scaling linearly in between and capped outside.
+// Example: fluid(250px, 330px) -> clamp(250px, 221.83px + 7.51vw, 330px)
+@function fluid($mobile, $desktop, $from: $fluid-from, $to: $fluid-to) {
+  $slope: math.div($desktop - $mobile, $to - $from);
+  $intercept: $mobile - $slope * $from;
+  $vw: $slope * 100vw;
+  // clamp() needs min <= max, so this also works for values that shrink.
+  $lower: math.min($mobile, $desktop);
+  $upper: math.max($mobile, $desktop);
+  @return clamp(#{$lower}, #{_round($intercept)} + #{_round($vw)}, #{$upper});
+}
+
+// Two decimals are plenty for px/vw and keep the compiled CSS readable.
+@function _round($value) {
+  @return math.div(math.round($value * 100), 100);
+}
 
 // Desktop layout switch. Only for real layout changes (columns, side-by-side
 // panels); sizes and spacing scale fluidly via clamp() instead.

@@ -47,16 +47,10 @@
   &--ending-soon {
     justify-content: space-between;
     background-color: $color-lavender;
-    min-height: 250px;
-    min-width: 250px;
+    min-height: fluid(250px, 330px);
+    width: fluid(250px, 330px);
     border-top-right-radius: 80px;
-    padding: 24px 15px;
-
-    @include desktop {
-      padding: 40px 44px 60px 44px;
-      min-height: 330px;
-      min-width: 330px;
-    }
+    padding: fluid(24px, 40px) fluid(15px, 44px) fluid(24px, 60px);
 
     .poll-card__category {
       font-family: $font-body;

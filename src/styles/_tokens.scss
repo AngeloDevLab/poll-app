@@ -25,6 +25,10 @@ $color-red: #ffada5;
 // Breakpoints (mobile-first: styles outside a breakpoint are the mobile base)
 $breakpoint-desktop: 1024px;
 
+// Viewport range fluid() scales across (Figma mobile / desktop frame widths).
+$fluid-from: 320px;
+$fluid-to: 1440px;
+
 // Fonts
 $font-heading: 'Nerko One', cursive;
 $font-body: 'Mulish', sans-serif;
