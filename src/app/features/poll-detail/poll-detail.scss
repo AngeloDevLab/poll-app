@@ -110,7 +110,7 @@
   &__title {
     font-family: $font-heading;
     font-weight: 400;
-    font-size: 3rem;
+    font-size: fluid(48px, 56px);
     color: $color-orange-deep;
     line-height: 0.9;
   }
