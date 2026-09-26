@@ -1,5 +1,6 @@
 @use './styles/buttons';
 @use './styles/tokens' as *;
+@use './styles/mixins' as *;
 
 * {
     margin: 0;
@@ -11,6 +12,12 @@ html,
 body {
     font-size: 16px;
     height: 100%;
+}
+
+// The page itself scrolls on <html> (the viewport). Straight track: rounded
+// corners would let the (white) browser canvas show through.
+html {
+    @include custom-scrollbar($track-radius: 0);
 }
 
 @font-face {

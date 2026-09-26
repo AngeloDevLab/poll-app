@@ -15,6 +15,34 @@
   border-top-right-radius: $accent;
 }
 
+// Scrollbar from the Figma reference: grey track, orange thumb, 8px, rounded.
+// Chrome ignores ::-webkit-scrollbar once scrollbar-color is set, so the
+// standard properties only go to browsers without the webkit pseudo (Firefox,
+// which supports colors only - no width in px, radius or shadow).
+// $track-radius: 0 for the page scrollbar - behind it is the browser canvas
+// (not the element's background), which would show through rounded corners.
+@mixin custom-scrollbar($size: 8px, $radius: 10px, $track-radius: $radius) {
+  @supports not selector(::-webkit-scrollbar) {
+    scrollbar-width: thin;
+    scrollbar-color: $color-orange $color-grey-medium;
+  }
+
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $color-grey-medium;
+    border-radius: $track-radius;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $color-orange;
+    border-radius: $radius;
+  }
+}
+
 // Colorized via CSS mask instead of swapping <img> files: the SVG's alpha
 // shape becomes the mask, background-color supplies the (changeable) color.
 @mixin mask-icon($url, $size: 1rem) {

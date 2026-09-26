@@ -84,6 +84,7 @@
     display: flex;
     gap: 1rem;
     overflow-x: auto;
+    @include custom-scrollbar;
 
     @include desktop {
       justify-content: space-between;
@@ -181,5 +182,6 @@
     grid-auto-rows: minmax(150px, auto);
     max-height: calc(3 * 150px + 2 * 1rem);
     overflow-y: auto;
+    @include custom-scrollbar;
   }
 }

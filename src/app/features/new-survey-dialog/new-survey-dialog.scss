@@ -12,6 +12,7 @@
   padding: 0;
   border: none;
   overflow-y: auto;
+  @include custom-scrollbar;
   background-color: $color-white;
 
   // Mobile: full-screen page. Desktop: a real modal card, centered over the
