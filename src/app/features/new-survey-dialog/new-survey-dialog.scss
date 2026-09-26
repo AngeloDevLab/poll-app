@@ -13,10 +13,33 @@
   border: none;
   overflow-y: auto;
   background-color: $color-white;
+
+  // Mobile: full-screen page. Desktop: a real modal card, centered over the
+  // dimmed home page (clicking the backdrop closes it, see onDialogClick).
+  @include desktop {
+    margin: auto;
+    width: min(1170px, calc(100vw - 4rem));
+    height: fit-content;
+    max-height: calc(100dvh - 4rem);
+    background-color: transparent;
+  }
+
+  &::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 }
 
 .inner-dialog {
   @include detail-shell-inner;
+
+  @include desktop {
+    max-width: none;
+
+    // No logo inside the modal card.
+    > img {
+      display: none;
+    }
+  }
 }
 
 .new-survey-form {
@@ -31,16 +54,52 @@
     flex-direction: column;
     gap: 1rem;
     margin: 40px 25px 0 25px;
+
+    // Desktop: "Draft" on its own row, "Cancel" to the right of the title.
+    @include desktop {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        'status .'
+        'title  cancel';
+      align-items: center;
+      margin: 40px 55px 0;
+    }
   }
 
   &__header-top-bar {
     display: flex;
     justify-content: space-between;
     width: 100%;
+
+    // Lets its children (status, cancel) sit directly in the header grid.
+    @include desktop {
+      display: contents;
+    }
   }
 
   &__status {
     @include status-pill($color-orange-light);
+
+    @include desktop {
+      grid-area: status;
+      justify-self: start;
+    }
+  }
+
+  &__cancel {
+    @include desktop {
+      grid-area: cancel;
+    }
+  }
+
+  // Mobile shows only the X.
+  &__cancel-label {
+    display: none;
+
+    @include desktop {
+      display: inline;
+    }
   }
 
   &__title {
@@ -48,6 +107,10 @@
     font-size: 56px;
     color: $color-orange-deep;
     line-height: 0.8;
+
+    @include desktop {
+      grid-area: title;
+    }
   }
 
   &__section {
@@ -59,9 +122,62 @@
     padding: 40px 10px;
     @include accent-corner(5px, 80px);
     gap: 0.5rem;
-    // Mobile: dropdown trigger flush with the other fields, no left padding.
-    // TODO: revisit once we tackle the desktop layout.
+    // Dropdown trigger flush with the other fields, no left padding.
     --dropdown-padding-left: 0px;
+
+    // Desktop: two columns. Name + meta left, description right; the question
+    // blocks and the "Add next question" button then auto-fill the next cells.
+    @include desktop {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-areas:
+        'name description'
+        'meta description';
+      column-gap: 4.5rem;
+      row-gap: 1rem;
+      margin: 0 55px;
+      padding: 50px 34px;
+    }
+  }
+
+  &__name {
+    @include desktop {
+      grid-area: name;
+    }
+  }
+
+  &__description {
+    @include desktop {
+      grid-area: description;
+    }
+  }
+
+  // Mobile: behaves as if the wrapper weren't there (same order as before).
+  &__meta {
+    display: contents;
+
+    @include desktop {
+      grid-area: meta;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 1.5rem;
+      align-items: start;
+    }
+  }
+
+  // Desktop: end date left, category right (DOM order is the mobile order).
+  &__deadline {
+    @include desktop {
+      grid-column: 1;
+      grid-row: 1;
+    }
+  }
+
+  &__category {
+    @include desktop {
+      grid-column: 2;
+      grid-row: 1;
+    }
   }
 
   &__add-question {
@@ -70,6 +186,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    // Desktop: sits in the next free grid cell, top-aligned with a question block.
+    @include desktop {
+      margin: 3rem 0 0;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
   }
 
   &__footer {
@@ -77,6 +200,11 @@
     justify-content: center;
     margin-top: 1rem;
     margin-bottom: 2.5rem;
+
+    @include desktop {
+      justify-content: flex-end;
+      margin: 1rem 55px 2.5rem;
+    }
   }
 }
 

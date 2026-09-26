@@ -8,7 +8,8 @@
 
         <div class="new-survey-form__header-top-bar">
           <div class="new-survey-form__status">Draft</div>
-          <button type="button" class="btn btn--secondary" (click)="close()" aria-label="Close">
+          <button type="button" class="btn btn--secondary new-survey-form__cancel" (click)="close()" aria-label="Cancel">
+            <span class="new-survey-form__cancel-label">Cancel</span>
             <svg viewBox="0 0 24 24" width="20" height="20" fill="#FEFDFF" stroke="#FEFDFF" stroke-width="2"
               stroke-linecap="round">
               <line x1="6" y1="6" x2="18" y2="18" />
@@ -20,23 +21,29 @@
       </header>
 
       <section class="new-survey-form__section">
-        <app-labeled-input label="Survey name" [(value)]="title" [error]="titleError() ? 'Required' : null"
-          (blurred)="markTouched('title')" />
+        <app-labeled-input class="new-survey-form__name" label="Survey name" [(value)]="title"
+          [error]="titleError() ? 'Required' : null" (blurred)="markTouched('title')" />
 
-        <div class="field">
-          <div class="field__control">
-            <app-dropdown label="Choose category" [options]="categoryOptions" [value]="category()"
-              (valueChange)="category.set($event)" (closed)="markTouched('category')" />
-            @if (categoryError()) {
-            <span class="field__error">Please choose a category.</span>
-            } @else {
-            <span class="field__value">{{ category() }}</span>
-            }
+        <!-- Desktop: end date + category side by side under the name. Mobile: no box (display: contents). -->
+        <div class="new-survey-form__meta">
+          <div class="field new-survey-form__category">
+            <div class="field__control">
+              <app-dropdown label="Choose category" [options]="categoryOptions" [value]="category()"
+                (valueChange)="category.set($event)" (closed)="markTouched('category')" />
+              @if (categoryError()) {
+              <span class="field__error">Please choose a category.</span>
+              } @else {
+              <span class="field__value">{{ category() }}</span>
+              }
+            </div>
           </div>
+
+          <app-labeled-input class="new-survey-form__deadline" label="Set end date" [optional]="true" type="date"
+            [(value)]="deadline" />
         </div>
 
-        <app-labeled-input label="Set end date" [optional]="true" type="date" [(value)]="deadline" />
-        <app-labeled-input label="Describing text" [optional]="true" [multiline]="true" [(value)]="description" />
+        <app-labeled-input class="new-survey-form__description" label="Describing text" [optional]="true"
+          [multiline]="true" [(value)]="description" />
 
         @for (question of questions(); track $index; let qi = $index) {
         <div class="question-block">
