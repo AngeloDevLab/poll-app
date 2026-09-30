@@ -44,9 +44,9 @@
 
 <div class="poll-detail">
   <div class="inner-poll-detail">
-    <div class="poll-detail__top-bar">
-      <a routerLink="/" aria-label="Back to surveys">
-        <img src="./images/logo-purple-dark.png" alt="logo">
+    <header class="poll-detail__top-bar">
+      <a routerLink="/">
+        <img src="./images/logo-purple-dark.png" alt="Poll App logo, back to surveys">
       </a>
       <button type="button" class="btn btn--primary poll-detail__create" (click)="createSurvey()">
         <span>Create survey</span>
@@ -54,15 +54,15 @@
           <img src="./icons/add_circle.svg" alt="">
         </span>
       </button>
-    </div>
+    </header>
 
     <div class="poll-detail-layout">
       <div class="poll-detail-panel">
         <header class="poll-detail-panel__header">
           <div class="poll-detail-panel__header-top-bar">
-            <div class="poll-detail-panel__status" [class.poll-detail-panel__status--closed]="isClosed()">
+            <p class="poll-detail-panel__status" [class.poll-detail-panel__status--closed]="isClosed()">
               {{ isClosed() ? 'Closed' : 'Published' }}
-            </div>
+            </p>
             <button type="button" class="btn btn--secondary poll-detail-panel__close" (click)="close()" aria-label="Close">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="#35273A" stroke="#35273A" stroke-width="2"
                 stroke-linecap="round">
@@ -145,10 +145,10 @@
   </div>
 </div>
 } @else {
-<div class="poll-detail-not-found">
+<section class="poll-detail-not-found">
   <p>Survey not found.</p>
   <button type="button" class="btn btn--primary" (click)="close()">
     <span>Back to surveys</span>
   </button>
-</div>
+</section>
 }

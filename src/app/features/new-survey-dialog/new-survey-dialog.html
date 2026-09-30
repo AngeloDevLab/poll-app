@@ -1,13 +1,13 @@
 <dialog #dialogRef class="new-survey-dialog" (close)="onDialogClosed()" (click)="onDialogClick($event)">
   <div class="inner-dialog">
 
-    <img src="./images/logo-purple-dark.png" alt="logo">
+    <img src="./images/logo-purple-dark.png" alt="Poll App logo">
 
     <form class="new-survey-form" (submit)="onSubmit($event)">
       <header class="new-survey-form__header">
 
         <div class="new-survey-form__header-top-bar">
-          <div class="new-survey-form__status">Draft</div>
+          <p class="new-survey-form__status">Draft</p>
           <button type="button" class="btn btn--secondary new-survey-form__cancel" (click)="close()" aria-label="Cancel">
             <span class="new-survey-form__cancel-label">Cancel</span>
             <svg viewBox="0 0 24 24" width="20" height="20" fill="#FEFDFF" stroke="#FEFDFF" stroke-width="2"

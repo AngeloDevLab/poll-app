@@ -2,6 +2,9 @@ import { Component, input, model, output } from '@angular/core';
 
 const DATE_PART_LENGTH = 2;
 
+// Incremented per instance so every label/input pair gets a unique id.
+let nextInputId = 0;
+
 /**
  * Formats a date as `YYYY-MM-DD` in local time (unlike `toISOString()`, which uses UTC).
  * @param date - The date to format.
@@ -39,6 +42,10 @@ export class LabeledInput {
   // Lets a parent reveal validation errors as soon as the user leaves a field,
   // instead of only on form submit.
   readonly blurred = output<void>();
+
+  // Links the <label> to its control, so clicking the label focuses the field
+  // and screen readers announce it.
+  protected readonly inputId = `labeled-input-${nextInputId++}`;
 
   // Earliest selectable date for date inputs.
   protected readonly today = toLocalIsoDate(new Date());

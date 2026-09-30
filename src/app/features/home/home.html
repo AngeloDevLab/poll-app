@@ -1,5 +1,5 @@
 <section class="hero">
-  <img class="hero__logo" src="./images/logo-orange.png" alt="logo">
+  <img class="hero__logo" src="./images/logo-orange.png" alt="Poll App logo">
 
   <div class="hero-content">
     <h1 class="hero-content__title">Collect Feedback,<br>Unlock Ideas</h1>
@@ -21,14 +21,14 @@
   <h2 class="polls__title">Your surveys</h2>
 
   @if (endingSoon().length > 0) {
-  <div class="polls__ending-soon">
+  <section class="polls__ending-soon">
     <h3 class="polls__ending-soon-title">Ending soon surveys</h3>
     <div class="polls__ending-soon-list">
       @for (poll of endingSoon(); track poll.id) {
       <app-poll-card [poll]="poll" variant="ending-soon" />
       }
     </div>
-  </div>
+  </section>
   }
 
   <div class="poll-list">

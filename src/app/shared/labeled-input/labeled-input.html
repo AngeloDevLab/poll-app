@@ -1,12 +1,12 @@
 <div class="labeled-input">
   <div class="labeled-input__label-row">
     <span class="labeled-input__label-group">
-      <span class="labeled-input__label">
+      <label class="labeled-input__label" [for]="inputId">
         {{ label() }}
         @if (optional()) {
           <span class="labeled-input__optional">(optional)</span>
         }
-      </span>
+      </label>
       @if (error(); as message) {
         <span class="labeled-input__error">{{ message }}</span>
       }
@@ -17,10 +17,11 @@
   </div>
 
   @if (multiline()) {
-    <textarea class="labeled-input__control" [value]="value()" (input)="onInput($event)" (blur)="blurred.emit()" [placeholder]="placeholder()" rows="3"></textarea>
+    <textarea class="labeled-input__control" [id]="inputId" [value]="value()" (input)="onInput($event)" (blur)="blurred.emit()" [placeholder]="placeholder()" rows="3"></textarea>
   } @else {
     <input
       class="labeled-input__control"
+      [id]="inputId"
       [class.labeled-input__control--date-empty]="type() === 'date' && !value()"
       [type]="type()"
       [value]="value()"
