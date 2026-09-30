@@ -1,6 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { PollWithQuestions } from '../../core/polls.service';
+import { PollWithQuestions } from '../../core/models/poll.model';
 import { EndsInPipe } from '../pipes/ends-in.pipe';
 
 @Component({

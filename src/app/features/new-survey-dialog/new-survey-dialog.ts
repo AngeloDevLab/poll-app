@@ -1,7 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, ElementRef, computed, inject, output, signal, viewChild } from '@angular/core';
-import { POLL_CATEGORIES, PollCategory } from '../../core/models/poll.model';
-import { NewPollInput, NewQuestionInput } from '../../core/polls.service';
+import { NewPollInput, NewQuestionInput, POLL_CATEGORIES, PollCategory } from '../../core/models/poll.model';
 import { Dropdown } from '../../shared/dropdown/dropdown';
 import { LabeledInput } from '../../shared/labeled-input/labeled-input';
 

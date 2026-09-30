@@ -1,7 +1,8 @@
 import { Component, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NewSurveyRequestService } from '../../core/new-survey-request.service';
-import { NewPollInput, PollWithQuestions, PollsService } from '../../core/polls.service';
+import { NewPollInput, PollWithQuestions } from '../../core/models/poll.model';
+import { PollsService } from '../../core/polls.service';
 import { Dropdown } from '../../shared/dropdown/dropdown';
 import { PollCard } from '../../shared/poll-card/poll-card';
 import { NewSurveyDialog } from '../new-survey-dialog/new-survey-dialog';

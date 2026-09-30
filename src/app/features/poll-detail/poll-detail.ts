@@ -3,8 +3,8 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CompletedPollsService } from '../../core/completed-polls.service';
 import { NewSurveyRequestService } from '../../core/new-survey-request.service';
-import { PollResult } from '../../core/models/poll.model';
-import { PollsService, QuestionWithOptions } from '../../core/polls.service';
+import { PollResult, QuestionWithOptions } from '../../core/models/poll.model';
+import { PollsService } from '../../core/polls.service';
 
 @Component({
   selector: 'app-poll-detail',

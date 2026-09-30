@@ -39,3 +39,25 @@ export interface PollResult {
   text: string;
   voteCount: number;
 }
+
+export interface QuestionWithOptions extends PollQuestion {
+  options: PollOption[];
+}
+
+export interface PollWithQuestions extends Poll {
+  questions: QuestionWithOptions[];
+}
+
+export interface NewQuestionInput {
+  text: string;
+  allowMultiple: boolean;
+  optionTexts: string[];
+}
+
+export interface NewPollInput {
+  title: string;
+  description?: string;
+  category: PollCategory;
+  deadline?: Date;
+  questions: NewQuestionInput[];
+}
