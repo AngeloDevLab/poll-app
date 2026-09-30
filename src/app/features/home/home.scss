@@ -4,7 +4,7 @@
 :host {
   display: block;
   background-color: $color-plum;
-  padding: 3rem clamp(1rem, 6vw, 7rem);
+  padding: 3rem fluid(16px, 112px);
   min-height: 100dvh;
 }
 
@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 50px;
+  gap: fluid(50px, 88px);
   padding-bottom: 5rem;
   max-width: 1440px;
   margin: 0 auto;
@@ -29,18 +29,18 @@
     &__title {
       font-family: $font-heading;
       color: $color-orange;
-      font-size: clamp(62px, 7vw, 100px);
+      font-size: fluid(62px, 100px);
       line-height: 0.9;
     }
 
     &__image {
       align-self: center;
-      height: clamp(250px, 25vw, 420px);
+      height: fluid(250px, 420px);
     }
 
     &__infos {
       font-weight: 600;
-      font-size: clamp(18px, 3vw, 24px);
+      font-size: fluid(18px, 24px);
       color: $color-white-pure;
     }
 
@@ -69,12 +69,12 @@
   &__title {
     font-family: $font-heading;
     color: $color-orange;
-    font-size: clamp(50px, 7vw, 72px);
+    font-size: fluid(50px, 72px);
   }
 
   &__ending-soon-title {
     font-weight: 500;
-    font-size: clamp(24px, 3vw, 32px);
+    font-size: fluid(24px, 32px);
     color: $color-white-pure;
   }
 
@@ -94,13 +94,12 @@
   align-self: stretch;
 
   &__controls {
-    margin-bottom: 24px;
+    margin-bottom: fluid(24px, 40px);
     display: flex;
     flex-direction: column;
     gap: 48px;
 
     @include desktop {
-      margin-bottom: 40px;
       display: flex;
       align-items: center;
       flex-direction: row;
@@ -139,10 +138,6 @@
 }
 
 @include desktop {
-  .hero {
-    gap: 88px;
-  }
-
   .hero .hero-content {
     display: grid;
     grid-template-columns: 1fr auto;
