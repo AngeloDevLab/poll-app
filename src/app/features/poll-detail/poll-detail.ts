@@ -5,6 +5,7 @@ import { CompletedPollsService } from '../../core/completed-polls.service';
 import { NewSurveyRequestService } from '../../core/new-survey-request.service';
 import { PollResult, QuestionWithOptions } from '../../core/models/poll.model';
 import { PollsService } from '../../core/polls.service';
+import { optionLetter } from '../../shared/utils/option-letter';
 
 @Component({
   selector: 'app-poll-detail',
@@ -53,7 +54,7 @@ export class PollDetail {
   });
 
   protected optionLetter(index: number): string {
-    return String.fromCharCode(65 + index);
+    return optionLetter(index);
   }
 
   protected isSelected(question: QuestionWithOptions, optionId: string): boolean {
