@@ -19,21 +19,18 @@
   }
 
   &__label {
-    font-family: $font-body;
     font-weight: bold;
     font-size: 18px;
     color: $color-white;
   }
 
   &__optional {
-    font-family: $font-body;
     font-weight: 400;
     font-size: 18px;
     color: $color-white;
   }
 
   &__error {
-    font-family: $font-body;
     font-weight: 600;
     font-size: 0.875rem;
     color: $color-red;
@@ -64,7 +61,6 @@
     border: none;
     @include accent-corner(5px, 20px);
     background-color: $color-white;
-    font-family: $font-body;
     font-size: 1rem;
     color: $color-plum;
     resize: vertical;

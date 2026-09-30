@@ -101,7 +101,6 @@
   &__meta {
     display: flex;
     justify-content: space-between;
-    font-family: $font-body;
     font-weight: 500;
     font-size: 14px;
     color: $color-plum;
@@ -116,7 +115,6 @@
   }
 
   &__description {
-    font-family: $font-body;
     color: $color-plum;
   }
 
@@ -174,28 +172,23 @@
   }
 }
 
-.question {
-  &::marker {
-    font-family: $font-body;
-    font-weight: 700;
-    font-size: 18px;
-    color: $color-plum;
-  }
+// Question number + text look the same in the voting list and the results list.
+.question::marker,
+.question__text,
+.results-question::marker,
+.results-question__text {
+  font-weight: 700;
+  font-size: 18px;
+  color: $color-plum;
+}
 
+.question {
   &__body {
     display: flex;
     flex-direction: column;
   }
 
-  &__text {
-    font-family: $font-body;
-    font-weight: 700;
-    font-size: 18px;
-    color: $color-plum;
-  }
-
   &__hint {
-    font-family: $font-body;
     font-size: 14px;
     color: $color-plum;
   }
@@ -215,7 +208,6 @@
   align-items: center;
   padding: 6px 8px;
   border-radius: 3px;
-  font-family: $font-body;
   color: $color-plum;
   cursor: pointer;
   transition: background-color 0.2s ease-out;
@@ -252,7 +244,6 @@
   border: none;
   border-radius: 20px;
   background-color: transparent;
-  font-family: $font-body;
   font-weight: bold;
   font-size: 18px;
   color: $color-plum;
@@ -312,26 +303,10 @@
   list-style-position: outside;
 }
 
-.results-question {
-  &::marker {
-    font-family: $font-body;
-    font-weight: 700;
-    font-size: 18px;
-    color: $color-plum;
-  }
-
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  &__text {
-    font-family: $font-body;
-    font-weight: 700;
-    font-size: 18px;
-    color: $color-plum;
-  }
+.results-question__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .result {
@@ -342,7 +317,6 @@
 
   &__letter {
     width: 1rem;
-    font-family: $font-body;
     font-weight: 700;
     font-size: 14px;
     color: $color-plum;
@@ -368,7 +342,6 @@
   &__percentage {
     width: 2.5rem;
     text-align: right;
-    font-family: $font-body;
     font-weight: 800;
     font-size: 14px;
     color: $color-orange-muted;
@@ -384,5 +357,4 @@
   gap: 1rem;
   background-color: $color-plum;
   color: $color-white;
-  font-family: $font-body;
 }

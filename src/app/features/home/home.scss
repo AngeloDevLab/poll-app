@@ -39,7 +39,6 @@
     }
 
     &__infos {
-      font-family: $font-body;
       font-weight: 600;
       font-size: clamp(18px, 3vw, 24px);
       color: $color-white-pure;
@@ -74,7 +73,6 @@
   }
 
   &__ending-soon-title {
-    font-family: $font-body;
     font-weight: 500;
     font-size: clamp(24px, 3vw, 32px);
     color: $color-white-pure;
@@ -126,7 +124,6 @@
 
     &__active {
       margin-left: 10px;
-      font-family: $font-body;
       font-weight: 400;
       font-size: 14px;
       color: $color-orange;
@@ -136,7 +133,6 @@
   .empty {
     // Span both columns of the desktop grid instead of sitting in the left one.
     grid-column: 1 / -1;
-    font-family: $font-body;
     font-weight: 500;
     color: $color-lavender;
   }

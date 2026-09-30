@@ -18,13 +18,11 @@
 
   &__category {
     margin-bottom: 0.5rem;
-    font-family: $font-body;
     font-weight: 500;
     color: $color-orange-light;
   }
 
   &__title {
-    font-family: $font-body;
     font-weight: bold;
     font-size: fluid(20px, 24px);
     color: $color-white-pure;
@@ -74,13 +72,11 @@
     padding: fluid(24px, 40px) fluid(15px, 44px) fluid(24px, 60px);
 
     .poll-card__category {
-      font-family: $font-body;
       font-weight: 600;
       color: $color-plum;
     }
 
     .poll-card__title {
-      font-family: $font-body;
       font-weight: bold;
       font-size: fluid(24px, 26px);
       color: $color-plum;

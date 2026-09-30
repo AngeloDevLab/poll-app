@@ -14,6 +14,19 @@ body {
     height: 100%;
 }
 
+// Body font set once here; components only override it for headings/buttons.
+body {
+    font-family: $font-body;
+}
+
+// Form controls don't inherit the font family by default. Only the family -
+// sizes stay as each component sets them (or the browser default).
+button,
+input,
+textarea {
+    font-family: inherit;
+}
+
 // The page itself scrolls on <html> (the viewport). Straight track: rounded
 // corners would let the (white) browser canvas show through.
 html {
