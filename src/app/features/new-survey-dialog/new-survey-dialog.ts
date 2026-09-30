@@ -7,7 +7,6 @@ import { optionLetter } from '../../shared/utils/option-letter';
 
 // Every question starts with (and must keep) this many answer options.
 const MIN_OPTIONS = 2;
-const ISO_DATE_LENGTH = 'YYYY-MM-DD'.length;
 const ERROR_SELECTOR = '.labeled-input__error, .field__error';
 
 // A picked deadline counts until the very end of that day (local time).
@@ -77,8 +76,6 @@ export class NewSurveyDialog {
   protected readonly category = signal('');
   protected readonly questions = signal<QuestionDraft[]>([emptyQuestion()]);
   protected readonly submitted = signal(false);
-
-  protected readonly todayIso = new Date().toISOString().slice(0, ISO_DATE_LENGTH);
 
   // Fields reveal their error as soon as they're blurred, not only on submit.
   private readonly touched = signal<Set<string>>(new Set());

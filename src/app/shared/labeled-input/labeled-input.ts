@@ -1,5 +1,22 @@
 import { Component, input, model, output } from '@angular/core';
 
+const DATE_PART_LENGTH = 2;
+
+/**
+ * Formats a date as `YYYY-MM-DD` in local time (unlike `toISOString()`, which uses UTC).
+ * @param date - The date to format.
+ * @returns The date string, as `<input type="date">` expects it.
+ */
+function toLocalIsoDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(DATE_PART_LENGTH, '0');
+  const day = String(date.getDate()).padStart(DATE_PART_LENGTH, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Text, date or multiline input with label, optional/error hint and a clear/remove button.
+ */
 @Component({
   selector: 'app-labeled-input',
   templateUrl: './labeled-input.html',
@@ -23,6 +40,12 @@ export class LabeledInput {
   // instead of only on form submit.
   readonly blurred = output<void>();
 
+  // Earliest selectable date for date inputs.
+  protected readonly today = toLocalIsoDate(new Date());
+
+  /**
+   * Clears the field, or asks the parent to remove it if it's already empty.
+   */
   protected clear(): void {
     if (this.value()) {
       this.value.set('');
@@ -31,16 +54,11 @@ export class LabeledInput {
     }
   }
 
+  /**
+   * Syncs the typed value into the `value` model.
+   * @param event - The native input event.
+   */
   protected onInput(event: Event): void {
     this.value.set((event.target as HTMLInputElement | HTMLTextAreaElement).value);
-  }
-
-  protected readonly today = LabeledInput.toIsoDate(new Date());
-
-  private static toIsoDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 }
