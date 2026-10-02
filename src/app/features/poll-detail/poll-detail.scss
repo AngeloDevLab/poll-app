@@ -27,6 +27,32 @@
   }
 }
 
+// Not in the Figma design: desktop has no close X, so this gives a visible way back.
+.back-link {
+  display: none;
+
+  @include desktop {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 1rem 1.5rem;
+    font-weight: 600;
+    color: $color-plum;
+    text-decoration: none;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: $color-orange;
+  }
+
+  &__icon {
+    @include mask-icon('#{$asset-base}/icons/chevron.svg', 0.75rem);
+    // The chevron points down; turn it to point left.
+    transform: rotate(90deg);
+  }
+}
+
 // Mobile: just the panel (results live inside it).
 // Desktop: panel left, always-open results in their own column on the right.
 .poll-detail-layout {
