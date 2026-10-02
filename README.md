@@ -1,66 +1,51 @@
 # PollApp
 
-An Angular application for creating and answering polls with live results (Supabase Realtime).
+An Angular application for creating and answering surveys with live results, powered by Supabase (Postgres + Realtime).
 
-> 🚧 Work in progress — more to come soon: Supabase integration, features, screenshots.
+## Features
+
+- **Ending soon** — the surveys closest to their deadline, shown above the main list, soonest first.
+- **Active / past surveys** — tabs for running and closed surveys, each with its own category filter (including "All surveys").
+- **Create a survey** — a "New survey" dialog (modal, not a separate route) with required fields (name, category, questions, answers) and optional ones (description, end date), validated as you go.
+- **Detail view** — questions, answer options, category, end date, description and the current results.
+- **Voting with live results** — pick your answers and submit; the results panel (right of the form on desktop) updates in real time for every visitor via Supabase Realtime, no reload needed.
+- **Past surveys** — can still be opened to see the final results, but no longer accept votes.
+
+### Extras
+
+- **Multiple questions per survey**, each either single-choice or multiple-choice ("Allow multiple answers").
+- **Re-submit lock** — after completing a survey, the browser remembers it (and your picks) in `localStorage`, so a returning visitor sees their answers instead of filling it in again.
+- **Optimistic voting** — results update instantly and roll back with a toast message if saving fails.
+- **Accessibility** — whole poll cards are clickable and keyboard-focusable, form fields have proper labels, the results panel is collapsible on mobile.
+- **Input limits** — maximum lengths for survey name, description, questions and answers.
 
 ## Stack
 
-- [Angular](https://angular.dev/) (Standalone Components, no SSR/SSG)
-- [Supabase](https://supabase.com/) (Postgres + Realtime)
+- [Angular](https://angular.dev/) 22 (standalone components, signals, no SSR/SSG)
+- [Supabase](https://supabase.com/) (Postgres + Realtime) via `@supabase/supabase-js`
 
-## Development server
+## Getting started
 
-To start a local development server, run:
+1. Install dependencies:
 
-```bash
-ng serve
-```
+   ```bash
+   npm install
+   ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+2. Create a Supabase project and run [`supabase/schema.sql`](supabase/schema.sql) in its SQL editor. This creates the tables, the `poll_results` view, Row Level Security policies and enables Realtime on `votes`.
 
-## Code scaffolding
+3. Copy `src/environments/environment.example.ts` to `src/environments/environment.ts` (git-ignored) and fill in your project URL and anon key from *Settings > API*.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+4. Start the dev server and open `http://localhost:4200/`:
 
-```bash
-ng generate component component-name
-```
+   ```bash
+   npm start
+   ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+To create a production build in `dist/poll-app`, run `npm run build`.
 
-```bash
-ng generate --help
-```
+## Design decisions
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **No authentication and no database-level vote-locking.** Anyone can create surveys and vote; the re-submit lock above is a convenience in the UI only, not a security measure (clearing storage or switching browsers resets it).
+- **Read and insert only.** RLS allows everyone to read and insert, but never to update or delete from the client.
+- **Survey status is derived from the deadline** — there is no separate "closed" column.
