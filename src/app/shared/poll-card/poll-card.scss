@@ -59,8 +59,8 @@
     background-color: rgba($color: $color-grey, $alpha: 0.16);
   }
 
-  &.disabled {
-    cursor: default;
+  // Ended polls stay clickable (read-only detail view), just visually toned down.
+  &--closed {
     opacity: 0.7;
   }
 
