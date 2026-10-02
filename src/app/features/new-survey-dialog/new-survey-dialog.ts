@@ -11,10 +11,10 @@ const ERROR_SELECTOR = '.labeled-input__error, .field__error';
 
 // Character limits per text field, so nobody can publish a novel as a title.
 const MAX_LENGTH = {
-  title: 100,
+  title: 150,
   description: 500,
   question: 200,
-  option: 100,
+  option: 150,
 } as const;
 
 // A picked deadline counts until the very end of that day (local time).
