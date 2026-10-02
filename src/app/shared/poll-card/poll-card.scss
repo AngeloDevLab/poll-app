@@ -1,8 +1,9 @@
 @use '../../../styles/tokens' as *;
 @use '../../../styles/mixins' as *;
 
+// Grid (not block) so the card stretches to the full height its parent gives the host.
 :host {
-  display: block;
+  display: grid;
 }
 
 .poll-card {
