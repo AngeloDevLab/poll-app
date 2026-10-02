@@ -17,7 +17,7 @@
   </div>
 
   @if (multiline()) {
-    <textarea class="labeled-input__control" [id]="inputId" [value]="value()" (input)="onInput($event)" (blur)="blurred.emit()" [placeholder]="placeholder()" rows="3"></textarea>
+    <textarea class="labeled-input__control" [id]="inputId" [value]="value()" (input)="onInput($event)" (blur)="blurred.emit()" [placeholder]="placeholder()" [attr.maxlength]="maxLength()" rows="3"></textarea>
   } @else {
     <input
       class="labeled-input__control"
@@ -28,6 +28,7 @@
       (input)="onInput($event)"
       (blur)="blurred.emit()"
       [placeholder]="placeholder()"
+      [attr.maxlength]="maxLength()"
       [attr.lang]="type() === 'date' ? 'en-GB' : null"
       [attr.min]="type() === 'date' ? today : null"
     />

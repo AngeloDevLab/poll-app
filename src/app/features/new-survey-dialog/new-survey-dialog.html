@@ -21,7 +21,7 @@
       </header>
 
       <section class="new-survey-form__section">
-        <app-labeled-input class="new-survey-form__name" label="Survey name" [(value)]="title"
+        <app-labeled-input class="new-survey-form__name" label="Survey name" [(value)]="title" [maxLength]="maxLength.title"
           [error]="titleError() ? 'Required' : null" (blurred)="markTouched('title')" />
 
         <!-- Desktop: end date + category side by side under the name. Mobile: no box (display: contents). -->
@@ -43,12 +43,13 @@
         </div>
 
         <app-labeled-input class="new-survey-form__description" label="Describing text" [optional]="true"
-          [multiline]="true" [(value)]="description" />
+          [multiline]="true" [(value)]="description" [maxLength]="maxLength.description" />
 
         @for (question of questions(); track $index; let qi = $index) {
         <div class="question-block">
           <div class="question-block__header">
             <app-labeled-input class="question-block__title" [label]="(qi + 1) + '. Question'" [value]="question.text"
+              [maxLength]="maxLength.question"
               [error]="questionError(question, qi) ? 'Required' : null"
               (valueChange)="updateQuestionText(qi, $event)" (removeRequested)="removeQuestion(qi)"
               (blurred)="markTouched('question-' + qi)" />
@@ -63,7 +64,7 @@
           </div>
 
           @for (option of question.options; track $index; let oi = $index) {
-          <app-labeled-input [label]="optionLabel(oi)" [value]="option"
+          <app-labeled-input [label]="optionLabel(oi)" [value]="option" [maxLength]="maxLength.option"
             [error]="optionError(question, qi, oi) ? 'Required' : null"
             (valueChange)="updateOption(qi, oi, $event)" (removeRequested)="removeOption(qi, oi)"
             (blurred)="markTouched('option-' + qi + '-' + oi)" />

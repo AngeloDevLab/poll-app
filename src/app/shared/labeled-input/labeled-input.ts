@@ -32,6 +32,8 @@ export class LabeledInput {
   readonly type = input<'text' | 'date'>('text');
   readonly multiline = input(false);
   readonly placeholder = input('');
+  // Caps how many characters can be typed; `null` means no limit.
+  readonly maxLength = input<number | null>(null);
   readonly value = model.required<string>();
 
   // Fires instead of clearing when the trash icon is clicked on an already-empty

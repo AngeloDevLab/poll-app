@@ -9,6 +9,14 @@ import { optionLetter } from '../../shared/utils/option-letter';
 const MIN_OPTIONS = 2;
 const ERROR_SELECTOR = '.labeled-input__error, .field__error';
 
+// Character limits per text field, so nobody can publish a novel as a title.
+const MAX_LENGTH = {
+  title: 100,
+  description: 500,
+  question: 200,
+  option: 100,
+} as const;
+
 // A picked deadline counts until the very end of that day (local time).
 const LAST_HOUR = 23;
 const LAST_MINUTE = 59;
@@ -69,6 +77,7 @@ export class NewSurveyDialog {
   protected readonly dialogRef = viewChild.required<ElementRef<HTMLDialogElement>>('dialogRef');
 
   protected readonly categoryOptions: string[] = [...POLL_CATEGORIES];
+  protected readonly maxLength = MAX_LENGTH;
 
   protected readonly title = signal('');
   protected readonly description = signal('');
