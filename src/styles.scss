@@ -27,6 +27,13 @@ textarea {
     font-family: inherit;
 }
 
+// Absolutely positioned overlays (e.g. the category dropdown on a short, empty
+// list) can reach past the end of the homescreen; match the canvas to it so no
+// white strip shows up below.
+html:has(app-home) {
+    background-color: $color-plum;
+}
+
 // The page itself scrolls on <html> (the viewport). Straight track: rounded
 // corners would let the (white) browser canvas show through.
 html {
