@@ -20,7 +20,7 @@
     </div>
 
     @if (!collapsible || resultsExpanded()) {
-    @if (!showResults()) {
+    @if (!hasAnyAnswers()) {
     <div class="results-placeholder">
       <p class="results-placeholder__info">Results will be shown here after participants complete the survey.</p>
       <p class="results-placeholder__empty">There are no answers yet.</p>

@@ -27,6 +27,18 @@ function nextSelection(current: string[], optionId: string, allowMultiple: boole
 }
 
 /**
+ * Counts the picked options as one extra vote each (local preview, nothing is saved).
+ * @param results - The stored results of one question.
+ * @param picked - The option IDs the visitor has picked but not submitted yet.
+ * @returns The results including the picks.
+ */
+function withPicks(results: PollResult[], picked: string[]): PollResult[] {
+  return results.map((result) =>
+    picked.includes(result.pollOptionId) ? { ...result, voteCount: result.voteCount + 1 } : result,
+  );
+}
+
+/**
  * Detail view of a single poll: lets the visitor pick answers per question,
  * submit them once, and shows the live results next to it.
  */
@@ -59,10 +71,6 @@ export class PollDetail {
   // Persisted per-browser via CompletedPollsService, not DB-backed vote-locking.
   protected readonly hasCompleted = computed(() => this.completedPolls.isCompleted(this.id()));
 
-  // Results stay hidden until the visitor has submitted; closed polls can't be
-  // submitted anymore, so they show their final results right away.
-  protected readonly showResults = computed(() => this.hasCompleted() || this.isClosed());
-
   protected readonly canComplete = computed(() => {
     const poll = this.poll();
     const selections = this.selections();
@@ -74,8 +82,13 @@ export class PollDetail {
     if (!poll) {
       return new Map<string, PollResult[]>();
     }
-    return new Map(poll.questions.map((q) => [q.id, this.pollsService.getResults(q.id)()]));
+    return new Map(poll.questions.map((q) => [q.id, this.resultsWithPicks(q.id)]));
   });
+
+  // Placeholder instead of empty bars until anyone (stored or just picked here) has answered.
+  protected readonly hasAnyAnswers = computed(() =>
+    [...this.questionResults().keys()].some((questionId) => this.totalVotes(questionId) > 0),
+  );
 
   /**
    * Returns the display letter for an option.
@@ -170,6 +183,20 @@ export class PollDetail {
   protected createSurvey(): void {
     this.newSurveyRequest.request();
     this.router.navigate(['/']);
+  }
+
+  /**
+   * Gets a question's stored results and, until the poll is submitted, adds the
+   * visitor's current picks as a frontend-only preview.
+   * @param questionId - ID of the question.
+   * @returns The results to display.
+   */
+  private resultsWithPicks(questionId: string): PollResult[] {
+    const results = this.pollsService.getResults(questionId)();
+    if (this.hasCompleted()) {
+      return results;
+    }
+    return withPicks(results, this.selections().get(questionId) ?? []);
   }
 
   /**
