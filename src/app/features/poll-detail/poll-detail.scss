@@ -308,6 +308,18 @@
   }
 }
 
+// Shown instead of the results until the visitor has completed the survey.
+.results-placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: fluid(64px, 146px);
+  // 24px to the title, minus the panel's own 1rem gap.
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  color: $color-plum;
+}
+
 .results-list {
   display: flex;
   flex-direction: column;

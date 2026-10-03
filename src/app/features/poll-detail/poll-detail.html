@@ -20,6 +20,12 @@
     </div>
 
     @if (!collapsible || resultsExpanded()) {
+    @if (!showResults()) {
+    <div class="results-placeholder">
+      <p class="results-placeholder__info">Results will be shown here after participants complete the survey.</p>
+      <p class="results-placeholder__empty">There are no answers yet.</p>
+    </div>
+    } @else {
     <ol class="results-list">
       @for (question of poll.questions; track question.id) {
       <li class="results-question">
@@ -38,6 +44,7 @@
       </li>
       }
     </ol>
+    }
     }
   </section>
 </ng-template>

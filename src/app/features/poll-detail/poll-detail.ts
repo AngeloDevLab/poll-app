@@ -59,6 +59,10 @@ export class PollDetail {
   // Persisted per-browser via CompletedPollsService, not DB-backed vote-locking.
   protected readonly hasCompleted = computed(() => this.completedPolls.isCompleted(this.id()));
 
+  // Results stay hidden until the visitor has submitted; closed polls can't be
+  // submitted anymore, so they show their final results right away.
+  protected readonly showResults = computed(() => this.hasCompleted() || this.isClosed());
+
   protected readonly canComplete = computed(() => {
     const poll = this.poll();
     const selections = this.selections();
