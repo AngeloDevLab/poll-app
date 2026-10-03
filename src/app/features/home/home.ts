@@ -1,6 +1,6 @@
 import { Component, afterNextRender, computed, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { NewPollInput, PollWithQuestions } from '../../core/models/poll.model';
+import { NewPollInput, POLL_CATEGORIES, PollWithQuestions } from '../../core/models/poll.model';
 import { NewSurveyRequestService } from '../../core/new-survey-request.service';
 import { PollsService } from '../../core/polls.service';
 import { Dropdown } from '../../shared/dropdown/dropdown';
@@ -26,14 +26,8 @@ function hasDeadline(poll: PollWithQuestions): poll is PollWithDeadline {
   return !!poll.deadline;
 }
 
-/**
- * Lists all categories that occur in the given polls, with "All surveys" first.
- * @param polls - The polls to collect categories from.
- * @returns The unique category options for the filter dropdown.
- */
-function categoriesOf(polls: PollWithQuestions[]): string[] {
-  return [ALL_CATEGORIES, ...new Set(polls.map((poll) => poll.category))];
-}
+// Every category is always offered, even without polls, so an empty filter result is possible.
+const CATEGORY_OPTIONS: string[] = [ALL_CATEGORIES, ...POLL_CATEGORIES];
 
 /**
  * Homescreen: hero, "ending soon" section and the running/closed poll lists with
@@ -69,7 +63,7 @@ export class Home {
     this.activeTab() === 'running' ? this.runningPolls() : this.closedPolls(),
   );
 
-  protected readonly activeCategoryOptions = computed(() => categoriesOf(this.activeTabPolls()));
+  protected readonly categoryOptions = CATEGORY_OPTIONS;
 
   protected readonly activeCategoryValue = computed(() =>
     this.activeTab() === 'running' ? this.runningCategory() : this.closedCategory(),
@@ -81,6 +75,13 @@ export class Home {
     const category = this.activeCategoryValue();
     const polls = this.activeTabPolls();
     return category === ALL_CATEGORIES ? polls : polls.filter((poll) => poll.category === category);
+  });
+
+  protected readonly emptyMessage = computed(() => {
+    const tabLabel = this.activeTab() === 'running' ? 'active' : 'past';
+    return this.hasActiveCategoryFilter()
+      ? `No ${tabLabel} surveys in this category.`
+      : `No ${tabLabel} surveys yet.`;
   });
 
   protected readonly newSurveyDialog = viewChild.required(NewSurveyDialog);

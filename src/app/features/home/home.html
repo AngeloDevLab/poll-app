@@ -44,7 +44,7 @@
 
       <div class="category-filter">
         <app-dropdown
-          [options]="activeCategoryOptions()"
+          [options]="categoryOptions"
           [value]="activeCategoryValue()"
           (valueChange)="setCategory($event)"
         />
@@ -59,7 +59,7 @@
       @for (poll of visiblePolls(); track poll.id) {
       <app-poll-card [poll]="poll" />
       } @empty {
-      <p class="empty">{{ activeTab() === 'running' ? 'No active surveys yet.' : 'No past surveys yet.' }}</p>
+      <p class="empty">{{ emptyMessage() }}</p>
       }
     </div>
   </div>
