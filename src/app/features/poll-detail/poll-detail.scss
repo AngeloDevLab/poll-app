@@ -47,7 +47,7 @@
   }
 
   &__icon {
-    @include mask-icon('#{$asset-base}/icons/chevron.svg', 0.75rem);
+    @include mask-icon('/icons/chevron.svg', 0.75rem);
     // The chevron points down; turn it to point left.
     transform: rotate(90deg);
   }
@@ -272,7 +272,7 @@
   }
 
   &__chevron {
-    @include mask-icon('#{$asset-base}/icons/chevron.svg', 0.75rem);
+    @include mask-icon('/icons/chevron.svg', 0.75rem);
     transform: rotate(0deg);
     transition: transform 0.15s ease-out;
 
