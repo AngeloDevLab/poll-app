@@ -2,6 +2,8 @@
 
 An Angular application for creating and answering surveys with live results, powered by Supabase (Postgres + Realtime).
 
+**Live demo:** [poll.angelodevelopment.de](https://poll.angelodevelopment.de)
+
 ## Features
 
 - **Ending soon** — the surveys closest to their deadline, shown above the main list, soonest first.
@@ -43,6 +45,25 @@ An Angular application for creating and answering surveys with live results, pow
    ```
 
 To create a production build in `dist/poll-app`, run `npm run build`.
+
+## Deployment
+
+Every push to `main` that changes more than Markdown files or `supabase/` runs the [deploy workflow](.github/workflows/deploy.yml). It can also be started by hand under **Actions**.
+
+1. The workflow creates `environment.ts` from repository secrets and builds the app.
+2. It copies the build to the server with `rsync` over SSH.
+3. [Caddy](https://caddyserver.com/) serves the files with HTTPS and answers unknown paths with `index.html`, so deep links like `/polls/:id` work on reload.
+
+Repository secrets (**Settings > Secrets and variables > Actions**):
+
+| Secret | Value |
+|---|---|
+| `SUPABASE_URL` | URL of the Supabase project |
+| `SUPABASE_ANON_KEY` | public anon key of the Supabase project |
+| `DEPLOY_KEY` | private SSH key of the deploy user |
+| `DEPLOY_KNOWN_HOSTS` | output of `ssh-keyscan <server-ip>` |
+| `DEPLOY_USER` | user that receives the build |
+| `DEPLOY_HOST` | IPv4 address of the server |
 
 ## Design decisions
 
