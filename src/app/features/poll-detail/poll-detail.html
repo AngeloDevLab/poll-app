@@ -154,6 +154,8 @@
           [ngTemplateOutletContext]="{ live: !isClosed(), collapsible: false }" />
       </div>
     </div>
+
+    <app-legal-links class="poll-detail__legal" />
   </div>
 </div>
 } @else {
@@ -162,5 +164,6 @@
   <button type="button" class="btn btn--primary" (click)="close()">
     <span>Back to surveys</span>
   </button>
+  <app-legal-links />
 </section>
 }

@@ -5,6 +5,7 @@ import { CompletedPollsService } from '../../core/completed-polls.service';
 import { NewSurveyRequestService } from '../../core/new-survey-request.service';
 import { PollResult, PollWithQuestions, QuestionWithOptions } from '../../core/models/poll.model';
 import { PollsService } from '../../core/polls.service';
+import { LegalLinks } from '../../shared/legal-links/legal-links';
 import { isPollClosed } from '../../shared/utils/is-poll-closed';
 import { optionLetter } from '../../shared/utils/option-letter';
 
@@ -44,7 +45,7 @@ function withPicks(results: PollResult[], picked: string[]): PollResult[] {
  */
 @Component({
   selector: 'app-poll-detail',
-  imports: [DatePipe, NgTemplateOutlet, RouterLink],
+  imports: [DatePipe, LegalLinks, NgTemplateOutlet, RouterLink],
   templateUrl: './poll-detail.html',
   styleUrl: './poll-detail.scss',
 })

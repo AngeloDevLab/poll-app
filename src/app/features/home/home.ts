@@ -4,6 +4,7 @@ import { NewPollInput, POLL_CATEGORIES, PollWithQuestions } from '../../core/mod
 import { NewSurveyRequestService } from '../../core/new-survey-request.service';
 import { PollsService } from '../../core/polls.service';
 import { Dropdown } from '../../shared/dropdown/dropdown';
+import { LegalLinks } from '../../shared/legal-links/legal-links';
 import { PollCard } from '../../shared/poll-card/poll-card';
 import { isPollClosed } from '../../shared/utils/is-poll-closed';
 import { NewSurveyDialog } from '../new-survey-dialog/new-survey-dialog';
@@ -35,7 +36,7 @@ const CATEGORY_OPTIONS: string[] = [ALL_CATEGORIES, ...POLL_CATEGORIES];
  */
 @Component({
   selector: 'app-home',
-  imports: [PollCard, Dropdown, NewSurveyDialog, SurveyPublishedDialog, HeroIllustration],
+  imports: [PollCard, Dropdown, LegalLinks, NewSurveyDialog, SurveyPublishedDialog, HeroIllustration],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

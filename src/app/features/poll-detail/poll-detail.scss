@@ -8,6 +8,15 @@
 
 .inner-poll-detail {
   @include detail-shell-inner;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.poll-detail__legal {
+  margin-top: auto;
+  padding: 1.5rem 1rem;
+  color: $color-plum;
 }
 
 // Same spacing the shell mixin gives a bare logo <img>.
@@ -34,6 +43,7 @@
   @include desktop {
     display: inline-flex;
     align-items: center;
+    align-self: flex-start;
     gap: 0.5rem;
     margin: 0 1rem 1.5rem;
     font-weight: 600;

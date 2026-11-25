@@ -1,0 +1,23 @@
+// Color and outer spacing come from the page that uses the links.
+:host {
+  display: block;
+}
+
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+
+  &__link {
+    font-weight: 500;
+    font-size: 14px;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+}
